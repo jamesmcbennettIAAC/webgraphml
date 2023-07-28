@@ -223,7 +223,7 @@ document.getElementById('btnSend').addEventListener('click', function () {
     console.log(raw);
     
     var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json", );
+    myHeaders.append("content-type", "application/json", );
 
 
     var requestOptions = {
@@ -235,7 +235,7 @@ document.getElementById('btnSend').addEventListener('click', function () {
     };
 
     //fetch("https://graphpost.fly.dev/process", requestOptions)
-    fetch("http://127.0.0.1:5000/process", requestOptions)
+    fetch("http://127.0.0.1:8000/process", requestOptions)
     .then(response => response.text())
     .then(result => console.log(result))
     .catch(error => console.log('error', error));

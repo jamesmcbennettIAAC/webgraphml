@@ -1,0 +1,19 @@
+Open new tab 
+
+Change request to post from dropdown menu
+
+http://127.0.0.1:8000/process in field (8000 as set in script app.py)
+
+From tabs make sure headers include 
+    Key: content-type
+    Value: application/json
+
+In body, enter:
+    {
+    "coordinates": [[41.3869, 2.1699], [41.3870, 2.1700], [41.3871, 2.1701]],
+    "type": "Linear Building",
+    "floors": 5,
+    "toggleCorridor": true
+    }
+
+Click "Send" button
