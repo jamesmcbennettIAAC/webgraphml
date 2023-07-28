@@ -217,31 +217,28 @@ document.getElementById('btnSend').addEventListener('click', function () {
 
     // Do something with the dataObject (e.g., send it to the server)
     console.log(dataObject);
-    
-    body = JSON.stringify(dataObject)
-    console.log(body);
-    
 
+
+    raw = JSON.stringify(dataObject)
+    console.log(raw);
     
-    // Use Fetch API to send JSON data to the Flask server
-    //fetch('http://localhost:5000/process', {
-    fetch('https://graphpost.fly.dev/process', {
-        mode: 'no-cors',
-        method: 'POST',
-        headers: {
-            'content-type': 'application/json'
-        },
-        body: JSON.stringify(dataObject) // Send the dataObject as the request body
-        
-        //body: JSON.stringify("Hello")
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json", );
+
+
+    var requestOptions = {
+    //mode: 'no-cors',
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+    };
+
+    //fetch("https://graphpost.fly.dev/process", requestOptions)
+    fetch("http://127.0.0.1:5000/process", requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.log('error', error));
 });
 
 
