@@ -8,16 +8,19 @@ canvas {
 }
 
 .row {
-    padding: 30px 0px;
-}
-.container-1 {
-    background: navy;
-    color: coral;
-    padding: 50px 0 0px 0;
+    padding: 5px 0px;
 }
 
+/*Title*/
+.container-1 { 
+    background: navy;
+    color: coral;
+    padding: 50px 0 20px 0;
+}
+
+/*Search*/
 .container-2 {
-    background: coral;
+    background: navajowhite;
     color: navy;
     padding: 10px 0;
     display: flex;
@@ -32,18 +35,50 @@ canvas {
     font-weight: bold;
     }
 
-.container-3 {
-    background: navy;
-    padding: 30px 0;
+/*Map Coordinates*/
+#coordinates {
+    display: flex;
+    flex-direction: column;
+    background: navajowhite;
+    }
+
+#coordinates h5 {
+    font-size: 1em;
+    text-transform: uppercase;
+    color: navajowhite;
+    text-align: center;
+    font-weight: bold;
+    padding: 15px 0 10px 0;
+    background-color: navy;
+    }
+
+#coordinates ul {
+    font-size: 1em;
+    color: navy;
+    display: flex;
+    justify-content: space-evenly;
+    list-style-type: none;
+    padding-bottom: 10px;
+    margin: 0px;
+    }
+
+/*Buttons*/
+.container-4 {
+    background: coral;
+    padding: 20px 0 0px 0;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    color: #fff;
+    color: navy;
     }
 
-.container-4 {
-    background: coral;
+/*Create Graph*/
+.container-5 {
+    width: 100%; /* Adjust width as needed */
+    height: 100%; /* Adjust height as needed */
+    background: navy;
+    color: white;
     padding: 30px 0 30px 0;
     display: flex;
     align-items: center;
@@ -51,14 +86,22 @@ canvas {
     text-align: center;
     }
 
-.container-5 {
-    background: NavajoWhite;
-    padding: 10px 0 0px 0;
+/*Download Files*/
+.container-6 {
+    background: coral;
+    color: white;
+    text-align: center;
+    padding: 30px 0 30px 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
     }
+
+.container-6 .container .row .col-4 p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
     
 * {
     font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -67,6 +110,17 @@ canvas {
 
 .fs-1 {
 font-size: 5rem!important;
+background-image: conic-gradient(#553c9a, #ee4b2b, #00c2cb);
+color: transparent;
+background-clip: text;
+-webkit-background-clip: text;
+}
+
+.fs-2 {
+background-image: conic-gradient(#ee4b2b, #00c2cb, #553c9a);
+color: transparent;
+background-clip: text;
+-webkit-background-clip: text;
 }
 
 #map {
@@ -75,7 +129,7 @@ font-size: 5rem!important;
     display: block;
 }
 .wrap {
-    width: 90%; /*change width of searchbar */
+    width: 70%; /*change width of searchbar */
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -135,10 +189,13 @@ font-size: 5rem!important;
     padding: 10px 20px;
     text-align: center;
     font-size: 15px;
-    background-color: navy;
-    color: #fff;
+    background-color: transparent;
+    color: navy;
     border: none;
-    border-radius: 10px;
+    /*border-radius: 10px;*/
+    height: 50px;
+    width: 170px;
+    border: 2px solid navy;
 }
 
 .btn-lg-navy {
@@ -149,12 +206,12 @@ font-size: 5rem!important;
     background-color: navy;
     color: #fff;
     border: none;
-    border-radius: 10px;
+    /*border-radius: 10px;*/
 }
 
 .btn-navy:hover, .btn-lg-navy:hover {
-    background-color: NavajoWhite;
-    color: navy;
+    background-color: navy;
+    color: white;
     border: none;
 }
 
@@ -167,11 +224,12 @@ font-size: 5rem!important;
     background-color: coral;
     color: #fff;
     border: none;
-    border-radius: 10px;
+    /*border-radius: 10px;*/
     margin: 5px 0px;
 }
 
 .btn-lg-coral {
+    width:100%;
     display: inline-block;
     padding: 20px 40px;
     text-align: center;
@@ -179,7 +237,7 @@ font-size: 5rem!important;
     background-color: coral;
     color: #fff;
     border: none;
-    border-radius: 10px;
+    /*border-radius: 10px;*/
 }
 
 .btn-coral:hover, .btn-lg-coral:hover {
@@ -187,28 +245,6 @@ font-size: 5rem!important;
     color: coral;
     border: none;
 }
-
-label {
-    display: inline-block;
-    font-weight: bold;
-  }
-
-/* Always show up down arrow on number input*/
-input[type=number]::-webkit-inner-spin-button {
-    opacity: 1
-}
-
-#floorsInput {
-    width: 100px;
-    color: navy;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 20px;
-    font-weight: bolder;
-    text-align: center;
-    outline: none;
-  }
 
 .image {
     position: relative;
@@ -219,30 +255,6 @@ input[type=number]::-webkit-inner-spin-button {
     height: 10px;
     background-color: navy;
   }
-
-#coordinates {
-    background: navy;
-    display: flex;
-    flex-direction: column
-  }
-
-#coordinates h2 {
-    font-size: 1.5em;
-    text-transform: uppercase;
-    color: coral;
-    text-align: center;
-    font-weight: bold;
-    padding-top: 30px;
-}
-#coordinates ul {
-    font-size: 1em;
-    color: coral;
-    display: flex;
-    justify-content: space-evenly;
-    list-style-type: none;
-    padding-bottom: 30px;
-}
-
 
 /* Hide the delete button */
 .leaflet-draw .leaflet-draw-edit-remove {
@@ -255,13 +267,37 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 
-
-input[type="number"] {
-    margin: 10px;
-}
-
-
-
+.custom-number-input {
+    display: flex;
+    align-items: center;
+  }
+  
+  .custom-number-input input[type="text"] {
+    font-size: 2em;
+    height: 50px;
+    width: 150px;
+    color: navy;
+    padding: 5px;
+    border: 2px solid navy;
+    font-weight: bolder;
+    text-align: center;
+    outline: none;
+    background-color: transparent;
+  }
+  
+  .custom-number-input button {
+    background: transparent;
+    border: none;
+    color: navy;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 5px 10px;
+    display: inline-block;
+  }
+  
+  .custom-number-input button:hover {
+    background-color: rgba(0, 0, 128, 0.1);
+  }
 /* ---------SINGLE DOUBLE TOGGLE ------------*/
 
 /* Hide the default checkbox */
@@ -271,14 +307,13 @@ input[type="checkbox"] {
 
     /* Customize the toggle appearance */
 .toggle {
-    display: inline-block;
-    width: 260px;
+    display: block;
     height: 50px;
-    background-color: coral;
-    border-radius: 15px;
+    width: 180px;
+    /*border-radius: 5px;*/
     position: relative;
     cursor: pointer;
-    margin: 10px;
+    margin: 0 auto;
 }
 
     /* Styling for the labels */
@@ -293,27 +328,25 @@ input[type="checkbox"] {
     cursor: pointer;
     line-height: 30px;
     text-align:center;
-    color: #fff;
-    font-weight: bold;
     font-size: 14px;
+    border: 2px solid navy;
+
 }
 
     /* Color for the left label (Single) */
 .toggle-label.left {
-    background-color: NavajoWhite;
+    background-color: transparent;
     color: navy;
-    font-weight: lighter;
-    border-radius: 15px 0 0 15px;
-    font-size: 0.7em;
+    /*border-radius: 15px 0 0 15px;*/
+
 }
 
     /* Color for the right label (Double) */
 .toggle-label.right {
     left: 50%;
     background-color: navy;
-    border-radius: 0 15px 15px 0;
-    font-weight: bold;
-    font-size: 1.3em;
+    color: #fff;
+    /*border-radius: 0 15px 15px 0;*/
 }
 
 
@@ -321,15 +354,24 @@ input[type="checkbox"] {
 .toggle-label.left.active {
     background-color: navy;
     color: #fff;
-    font-weight: bold;
-    font-size: 1.3em;
 }
 
 /* Styling for the labels in the active state */
 .toggle-label.right.active {
-    background-color: NavajoWhite;
+    background-color: transparent;
     color: navy;
-    font-weight: lighter;
-    font-size: 0.7em;
 }
 
+/* Create Graph Vertically alignment using col-4 which is 4 spaces of 12 grid, i.e. 3 columns*/
+.col-4{
+display: flex;
+flex-direction: column;
+justify-content: center;
+}
+
+.col-4 p {
+    display: flex;
+    align-items: center;
+    height: 100%; /* Ensure the <p> takes the full height of the parent */
+    margin: 0; /* Remove default margin to avoid extra spacing */
+}

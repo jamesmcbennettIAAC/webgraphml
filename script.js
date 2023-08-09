@@ -1,5 +1,5 @@
 // Initialize the map
-var map = L.map('map').setView([41.3851, 2.1734], 13); //coordinates of Barcelona
+const map = L.map('map').setView([41.3973, 2.1925], 18); //coordinates of Barcelona
 
 // Add the tile layer with a different color scheme
 L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
@@ -76,8 +76,8 @@ function displayCoordinates(coordinates, type) {
     coordinatesContainer.innerHTML = ''; // Clear previous coordinates
   
     if (coordinates.length) {
-      var coordinatesTitle = document.createElement('h2');
-      coordinatesTitle.textContent = 'Coordinates in decimal degrees for ' + type;
+      var coordinatesTitle = document.createElement('h5');
+      coordinatesTitle.textContent = 'Coordinates ' + type;
       coordinatesContainer.appendChild(coordinatesTitle);
   
       var coordinatesList = document.createElement('ul');
@@ -112,7 +112,7 @@ function searchLocation(query) {
         if (data.length > 0) {
         var lat = data[0].lat;
         var lon = data[0].lon;
-        map.setView([lat, lon], 13);
+        map.setView([lat, lon], 18);
         } else {
         alert('Location not found');
         }
@@ -125,6 +125,8 @@ function searchLocation(query) {
 
 
 
+
+// Buttons below Leaflet Map
 // Button1 (Draw Polyline)
 document.getElementById('btn1').addEventListener('click', function () {
     const drawHandler = new L.Draw.Polyline(map, drawControl.options.polyline).enable();
@@ -144,8 +146,21 @@ document.getElementById('btn3').addEventListener('click', function() {
 });
 
 
+// Up down arrows on num input
+const floorsInput = document.getElementById("floorsInput");
+
+function increment() {
+  floorsInput.value = parseInt(floorsInput.value, 10) + 1;
+}
+
+function decrement() {
+  if (floorsInput.value > 1) {
+    floorsInput.value = parseInt(floorsInput.value, 10) - 1;
+  }
+}
 
 
+// Corridor Single or Double
 // JavaScript to toggle the switch
 var toggleCorridor = document.getElementById('toggleCorridor');
 var toggleLabels = document.querySelectorAll('.toggle-label');
@@ -166,33 +181,40 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+// Define dataObject in a scope accessible to both event handlers
+var dataObject;
 
 
-// Create a Javascript Object
+
+// Create a Javascript Object combining all browser inputs
 // Event handler for btnSend button click
 document.getElementById('btnSend').addEventListener('click', function () {
     var coordinates = [];
-    var type;
+    var geometryType;
+    var typology;
+    var floorsInput;
 
     // Get the drawn layer, if available
     var layers = drawnItems.getLayers();
     if (layers.length > 0) {
         var layer = layers[0]; // Assuming only one layer is drawn
 
-        // Get the coordinates and type of the drawn layer
+        // Get the coordinates and geometry type of the drawn layer
         if (layer instanceof L.Polyline || layer instanceof L.Polygon) {
             if (layer instanceof L.Polygon) {
-                type = 'Courtyard Building';
+                geometryType = 'Polygon';
+                typology = 'courtyard';
                 var rings = layer.getLatLngs();
                 for (var i = 0; i < rings.length; i++) {
-                    coordinates = coordinates.concat(rings[i].map(function (latlng) {
-                        return [latlng.lat, latlng.lng];
+                    coordinates.push(rings[i].map(function (latlng) {
+                        return [latlng.lng, latlng.lat];
                     }));
                 }
             } else {
-                type = 'Linear Building';
+                geometryType = 'LineString';
+                typology = 'linear';
                 coordinates = layer.getLatLngs().map(function (latlng) {
-                    return [latlng.lat, latlng.lng];
+                    return [latlng.lng, latlng.lat];
                 });
             }
         } else {
@@ -206,40 +228,88 @@ document.getElementById('btnSend').addEventListener('click', function () {
 
     // Get the floorsInput value and the toggleCorridor checkbox state
     var floorsInput = parseInt(document.getElementById('floorsInput').value);
+    var toggleCorridor = document.getElementById('toggleCorridor').checked;
 
     // Create the JavaScript object with the collected data
     var dataObject = {
-        coordinates: coordinates,
-        type: type,
-        floors: floorsInput,
-        toggleCorridor: toggleCorridor.checked // Use the existing toggleCorridor variable directly
+        type: "feature",
+        geometry: {
+            type: geometryType,
+            coordinates: coordinates
+        },
+        properties: {
+            corridorType: toggleCorridor ? "double loaded" : "single loaded",
+            typology: typology,
+            floorsInput: floorsInput
+        }
     };
 
     // Do something with the dataObject (e.g., send it to the server)
     console.log(dataObject);
 
 
-    raw = JSON.stringify(dataObject)
-    console.log(raw);
+
+    // DownloadJSON of dataObject
+    // Convert the dataObject to JSON format
+    var jsonContent = JSON.stringify(dataObject, null, 2); // The '2' argument is for indentation
+
+    // Create a Blob with the JSON content
+    var blob = new Blob([jsonContent], { type: 'application/json' });
+
+    // Create a download link
+    var downloadLink = document.createElement('a');
+    downloadLink.href = URL.createObjectURL(blob);
+    downloadLink.download = 'dataObject.json'; // The filename for the downloaded file
+    downloadLink.innerText = 'Download JSON';
     
-    var myHeaders = new Headers();
-    myHeaders.append("content-type", "application/json", );
+    // Apply CSS styling to the download link
+    downloadLink.style.display = 'block'; // To make the link a block element
+    downloadLink.style.textAlign = 'center'; // Center-align the text
+    downloadLink.style.fontSize = '38px'; // Make the text bigger
+    downloadLink.style.paddingTop = '50px'; // Add padding to the top
+    downloadLink.style.paddingBottom = '50px'; // Add padding to the bottom
+
+    // Append the download link to the DOM
+    var downloadContainer = document.getElementById('download-container');
+    downloadContainer.innerHTML = ''; // Clear previous content
+    downloadContainer.appendChild(downloadLink);
 
 
+
+
+
+    /*
+    // Fetch API
     var requestOptions = {
-    //mode: 'no-cors',
-    method: 'POST',
-    headers: myHeaders,
-    body: raw,
-    redirect: 'follow'
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dataObject),
+        redirect: 'follow'
     };
 
     //fetch("https://graphpost.fly.dev/process", requestOptions)
     fetch("http://127.0.0.1:8000/process", requestOptions)
-    .then(response => response.text())
-    .then(result => console.log(result))
-    .catch(error => console.log('error', error));
+        .then(response => response.text())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error));
+    */
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
