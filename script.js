@@ -3,7 +3,7 @@ const map = L.map('map').setView([41.3973, 2.1925], 18); //coordinates of Barcel
 
 // Add the tile layer with a different color scheme
 L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors',
+    attribution: 'IAAC MaCAD 2022/23',
     maxZoom: 24
 }).addTo(map);
 
@@ -19,6 +19,13 @@ var drawControl = new L.Control.Draw({
 });
 map.addControl(drawControl);
 
+// Declare the scaledCoordinates globally
+var JSONCoordinates;
+
+// Function to calculate distance between two points in meters
+function calculateDistance(latlng1, latlng2) {
+    return latlng1.distanceTo(latlng2);
+}
 
 // Event handler for polyline/polygon creation
 map.on('draw:created', function(event) {
@@ -28,69 +35,188 @@ map.on('draw:created', function(event) {
     var layer = event.layer;
     drawnItems.addLayer(layer);
   
-    var coordinates = [];
+    var pixelCoordinates = [];
   
     if (layer instanceof L.Polyline || layer instanceof L.Polygon) {
-      if (layer instanceof L.Polygon) {
 
-        // Set the type property to 'Courtyard'
-        layer.type = 'Courtyard Building';
-
-        // Get all rings of the polygon
-        var rings = layer.getLatLngs();
+        if (layer instanceof L.Polygon) {
+            // Set the type property to 'Courtyard'
+            layer.type = 'Courtyard Building';
+            
+            // Get all rings of the polygon
+            var rings = layer.getLatLngs();
   
-        // Loop through all rings and extract their coordinates
-        for (var i = 0; i < rings.length; i++) {
-          coordinates = coordinates.concat(rings[i].map(function(latlng) {
-            return [latlng.lat, latlng.lng];
-          }));
+            // Loop through all rings and extract pixel coordinates
+            for (var i = 0; i < rings.length; i++) {
+                var ring = rings[i];
+                var ringPixelCoords = [];
+                for (var j = 0; j < ring.length; j++) {
+                    var latlng = ring[j];
+                    var pixelPoint = map.latLngToContainerPoint(latlng);
+                    ringPixelCoords.push([pixelPoint.x, pixelPoint.y]);
+                }
+                pixelCoordinates.push(ringPixelCoords);
+            }
+
+            // Calulate distance between first and second point
+            // note layer.getLatLngs()[0]; for polygon and layer.getLatLngs(); for polylines
+            var latlngs = layer.getLatLngs()[0];
+        
+            if (latlngs.length >= 2) {
+                var firstLatLng = latlngs[0];
+                var secondLatLng = latlngs[1];
+                
+                var distance = calculateDistance(firstLatLng, secondLatLng);
+      
+                console.log('Distance between the first and second points: ' + distance.toFixed(2) + ' meters');
+            }
+        } else {
+            // Set the type property to 'Linear'
+            layer.type = 'Linear Building';
+
+            var polylinePixelCoords = layer.getLatLngs().map(function(latlng) {
+                var pixelPoint = map.latLngToContainerPoint(latlng);
+                return [pixelPoint.x, pixelPoint.y];
+            });
+
+            pixelCoordinates.push(polylinePixelCoords);
+
+            // Calulate distance between first and second point
+            // note layer.getLatLngs()[0]; for polygon and layer.getLatLngs(); for polylines
+            var latlngs = layer.getLatLngs();
+        
+            if (latlngs.length >= 2) {
+                var firstLatLng = latlngs[0];
+                var secondLatLng = latlngs[1];
+                
+                var distance = calculateDistance(firstLatLng, secondLatLng);
+      
+                console.log('Distance between the first and second points: ' + distance.toFixed(2) + ' meters');
+            }
         }
-      } else {
-
-        // Set the type property to 'Linear'
-        layer.type = 'Linear Building';
-
-        coordinates = layer.getLatLngs().map(function(latlng) {
-          return [latlng.lat, latlng.lng];
-        });
-      }
   
-      displayCoordinates(coordinates, layer.type);
+        displayPixelCoordinates(pixelCoordinates, layer.type, distance);
+        JSONCoordinates = displayPixelCoordinates(pixelCoordinates, layer.type, distance);
+
     }
-  });
-  
-  map.on('draw:drawstop', function(event) {
+});
+
+map.on('draw:drawstop', function(event) {
     // Finish drawing the polygon when the user completes it
     var layer = event.layer;
     if (layer instanceof L.Polygon) {
-      layer._finishShape();
+        layer._finishShape();
     }
-  });
-  
+});
 
 
 
-// Display coordinates function
-function displayCoordinates(coordinates, type) {
+// Function to calculate distance between two points in pixels
+function calculatePixelDistance(point1, point2) {
+    var dx = point2[0] - point1[0];
+    var dy = point2[1] - point1[1];
+    return Math.sqrt(dx * dx + dy * dy);
+}
+
+// Function to scale points by a factor
+function scalePoints(points, scaleFactor) {
+    var scaledPoints = [];
+
+    for (var i = 0; i < points.length; i++) {
+        var scaledX = points[i][0] * scaleFactor;
+        var scaledY = points[i][1] * scaleFactor;
+        scaledPoints.push([scaledX, scaledY]);
+    }
+
+    return scaledPoints;
+}
+
+// Function to calculate the centroid of an array of points
+function calculateCentroid(points) {
+    var sumX = 0;
+    var sumY = 0;
+
+    for (var i = 0; i < points.length; i++) {
+        sumX += points[i][0];
+        sumY += points[i][1];
+    }
+
+    var centerX = sumX / points.length;
+    var centerY = sumY / points.length;
+
+    return [centerX, centerY];
+}
+
+// Function to move points by a vector
+function movePointsByVector(points, vector) {
+    var movedPoints = [];
+
+    for (var i = 0; i < points.length; i++) {
+        var movedX = points[i][0] + vector[0];
+        var movedY = points[i][1] + vector[1];
+        movedPoints.push([movedX, movedY]);
+    }
+
+    return movedPoints;
+}
+
+// Function to flip the sign of the y-coordinate
+function flipYCoordinates(points) {
+    var flippedPoints = [];
+
+    for (var i = 0; i < points.length; i++) {
+        var flippedX = points[i][0];
+        var flippedY = -points[i][1]; // Flip the y-coordinate
+        flippedPoints.push([flippedX, flippedY]);
+    }
+
+    return flippedPoints;
+}
+
+// Display pixel coordinates function
+function displayPixelCoordinates(pixelCoordinates, type, distance) {
     var coordinatesContainer = document.getElementById('coordinates');
     coordinatesContainer.innerHTML = ''; // Clear previous coordinates
   
-    if (coordinates.length) {
-      var coordinatesTitle = document.createElement('h5');
-      coordinatesTitle.textContent = 'Coordinates ' + type;
-      coordinatesContainer.appendChild(coordinatesTitle);
+    if (pixelCoordinates.length) {
+        var coordinatesTitle = document.createElement('h5');
+        coordinatesTitle.textContent = '' + type; // Change title of popup coordinates
+        coordinatesContainer.appendChild(coordinatesTitle);
   
-      var coordinatesList = document.createElement('ul');
+        var centroid = calculateCentroid(pixelCoordinates[0]); // Assuming only the first set of coordinates
+        var moveVector = [-centroid[0], -centroid[1]]; // Vector from centroid to origin
+
+        var movedCoordinates = movePointsByVector(pixelCoordinates[0], moveVector);
+        var flippedCoordinates = flipYCoordinates(movedCoordinates);
+
+        var pixelPoint1 = flippedCoordinates[0]; // Assuming point 1
+        var pixelPoint2 = flippedCoordinates[1]; // Assuming point 2
+
+        var pixelDistance = calculatePixelDistance(pixelPoint1, pixelPoint2);
+        var scaleFactor = distance / pixelDistance;
+        var scaledCoordinates = scalePoints(flippedCoordinates, scaleFactor);
+
+        var coordinatesList = document.createElement('ul');
   
-      coordinates.forEach(function(coord) {
-        var listItem = document.createElement('li');
-        listItem.textContent = coord[0].toFixed(6) + ', ' + coord[1].toFixed(6);
-        coordinatesList.appendChild(listItem);
-      });
+        scaledCoordinates.forEach(function(coord) {
+            var listItem = document.createElement('li');
+            listItem.textContent = '[' + coord.join(', ') + ']'; // Join the coordinates and format them
+            coordinatesList.appendChild(listItem);
+        });
   
-      coordinatesContainer.appendChild(coordinatesList);
+        coordinatesContainer.appendChild(coordinatesList);
+
+        return scaledCoordinates;
+        
     }
-  }
+}
+
+
+
+
+
+
+
 
 
 
@@ -235,7 +361,7 @@ document.getElementById('btnSend').addEventListener('click', function () {
         type: "feature",
         geometry: {
             type: geometryType,
-            coordinates: coordinates
+            coordinates: JSONCoordinates
         },
         properties: {
             corridorType: toggleCorridor ? "double loaded" : "single loaded",
