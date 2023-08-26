@@ -95,8 +95,8 @@ map.on('draw:created', function(event) {
             }
         }
   
-        displayPixelCoordinates(pixelCoordinates, layer.type, distance);
         JSONCoordinates = displayPixelCoordinates(pixelCoordinates, layer.type, distance);
+        
 
     }
 });
@@ -173,6 +173,28 @@ function flipYCoordinates(points) {
     return flippedPoints;
 }
 
+// Function to check if points are in counterclockwise order
+function isCounterclockwise(points) {
+    let sum = 0;
+    for (let i = 0; i < points.length; i++) {
+        const current = points[i];
+        const next = points[(i + 1) % points.length];
+        sum += (next[0] - current[0]) * (next[1] + current[1]);
+    }
+    return sum > 0;
+}
+
+// Function to ensure points are in counterclockwise order
+function ensureCounterclockwise(points) {
+    if (isCounterclockwise(points)) {
+        // If not counterclockwise, reverse the order
+        console.log("List was reversed to ensure counterclockwise order.");
+        return points.reverse();
+        
+    }
+    return points;
+}
+
 // Display pixel coordinates function
 function displayPixelCoordinates(pixelCoordinates, type, distance) {
     var coordinatesContainer = document.getElementById('coordinates');
@@ -196,9 +218,11 @@ function displayPixelCoordinates(pixelCoordinates, type, distance) {
         var scaleFactor = distance / pixelDistance;
         var scaledCoordinates = scalePoints(flippedCoordinates, scaleFactor);
 
+        var counterclockwisePoints = ensureCounterclockwise(scaledCoordinates);
+
         var coordinatesList = document.createElement('ul');
   
-        scaledCoordinates.forEach(function(coord) {
+        counterclockwisePoints.forEach(function(coord) {
             var listItem = document.createElement('li');
             listItem.textContent = '[' + coord.join(', ') + ']'; // Join the coordinates and format them
             coordinatesList.appendChild(listItem);
@@ -206,7 +230,7 @@ function displayPixelCoordinates(pixelCoordinates, type, distance) {
   
         coordinatesContainer.appendChild(coordinatesList);
 
-        return scaledCoordinates;
+        return counterclockwisePoints;
         
     }
 }
