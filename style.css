@@ -5,6 +5,8 @@ body{
 canvas {
     margin-left: auto;
     margin-right: auto;
+    max-width:65%;
+    max-height: 65%;
 }
 
 .row {
@@ -109,20 +111,20 @@ canvas {
 }
 
 .fs-1 {
-font-size: 4.5rem!important;
-background-image: conic-gradient(#553c9a, #ee4b2b, #00c2cb);
-color: transparent;
-background-clip: text;
--webkit-background-clip: text;
-padding-bottom: 50px;
+    font-size: 4.5rem!important;
+    background-image: conic-gradient(#553c9a, #ee4b2b, #00c2cb);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    padding-bottom: 50px;
 }
 
 .fs-2 {
-background-image: conic-gradient(#ee4b2b, #00c2cb, #553c9a);
-color: transparent;
-background-clip: text;
--webkit-background-clip: text;
-padding-bottom: 5px;
+    background-image: conic-gradient(#ee4b2b, #00c2cb, #553c9a);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    padding-bottom: 5px;
 }
 
 .fs-3 {
@@ -135,6 +137,7 @@ padding-bottom: 5px;
     justify-content: center;
     align-items: center;
     height: 50px;
+    font-size: 3em!important;
 }
 
 .col {

@@ -33,13 +33,11 @@
             <h3 class="fs-4">Thesis Supervisor: David Andrés León</h3>
         </div>
         <div class="col-md-6">
-            <p>Our thesis project uses cloud-based data-management and graph-machine learning to quickly predict a building from a open or closed spline inputted by a user in a web-browser. A downloadable JSON file is available for download that can be opened in Revit.</p>
-            <p>Our thesis project uses cloud-based data-management and graph-machine learning to quickly predict a building from a open or closed spline inputted by a user in a web-browser. A downloadable JSON file is available for download that can be opened in Revit.</p>
-            <p>Our thesis project uses cloud-based data-management and graph-machine learning to quickly predict a building from a open or closed spline inputted by a user in a web-browser. A downloadable JSON file is available for download that can be opened in Revit.</p>
-            <p>Our thesis project uses cloud-based data-management and graph-machine learning to quickly predict a building from a open or closed spline inputted by a user in a web-browser. A downloadable JSON file is available for download that can be opened in Revit.</p>
-            <p>Our thesis project uses cloud-based data-management and graph-machine learning to quickly predict a building from a open or closed spline inputted by a user in a web-browser. A downloadable JSON file is available for download that can be opened in Revit.</p>
-            <p>Our thesis project uses cloud-based data-management and graph-machine learning to quickly predict a building from a open or closed spline inputted by a user in a web-browser. A downloadable JSON file is available for download that can be opened in Revit.</p>
-
+            <p>This thesis applies knowledge gained from two IAAC MaCAD 2022/23 courses.</p>
+            <p>The first course delves into Cloud-Based Data Management, emphasizing front-end development using HTML, CSS, and JavaScript to interface with Rhino.Compute. This enables the display and control of Rhino3D or Grasshopper3D within a web browser.</p>
+            <p>The second course focuses on Graph-Machine Learning, utilizing graphs composed of edges and nodes to represent buildings. Machine learning techniques are employed to swiftly train a model for predicting node and edge classifications.</p>
+            <p>This thesis project centers on multi-story residential buildings and the prediction of egress locations using graph machine-learning (GML). This page initiates with leaflet.js maps, allowing users to search for any location in the world and then draw either a lineString or Polygon to represent linear or courtyard buildings. The coordinates of the curve are captured as pixel points, scaled according to known distances, relocated to the origin, reordered in a counter-clockwise fashion, and stored in a JavaScript object. Additional information, such as the number of floor levels and whether the building should be single-loaded or double-loaded on the corridor, is also recorded.</p>
+            <p>The JavaScript object gets transmitted to the backend as a JSON file by clicking 'CALCULATE GRAPH'. JSON allows for the storage of data using key-value pairs and arrays.</p>
         </div>
       </div>
     </div>
@@ -107,15 +105,14 @@
     <div class="container">
       <div class="row">
         <div class="col-4">
-          <p>The Create Graph button creates a temporary JSON Download button and combines the above data in a Javascript object called dataObject. This is can also be observed in the console. We have suceeded in sending and receiving information locally.</p>
+          <p style="text-align: left;">The Calculate Graph button sends a JSON to the backend to use Rhino.Compute. It returns a JSON with node and edge classification.</p>
         </div>
         <div class="col-4">
-          <button class="btn-lg-coral btn-primary"  id="btnSend">CREATE GRAPH</button>
+          <button class="btn-lg-coral btn-primary"  id="btnSend">CALCULATE GRAPH</button>
           <div id="output"></div>
         </div>
         <div class="col-4">
-          <p>We are currently working on making this work with fly.io and building the backend.</p>
-          <p>Below is a graph created using lists of points in three.js without using Rhino.</p>
+          <p style="text-align: right;">A graph will appear below, drawn using three.js, that employs spheres for nodes and cylinders for edges. Data is extracted from a JSON file provided by the backend, organizing coordinates based on their classification. Blue indicates rooms, pink as corridors, and red denote egress.</p>
         </div>
       </div>
     </div>
@@ -136,7 +133,7 @@
           }
         }
         </script>
-    <script type="module" src="./graph2.js"></script>
+    <script type="module" src="./graph.js"></script>
   </div>
 
 
@@ -148,7 +145,7 @@
           <button class="btn-lg-navy btn-primary"  id="btnSend">DOWNLOAD .RVT</button>
         </div>
         <div class="col-4">
-          <p>This section is not yet working and will be last to complete. It will allow a Revit and Grasshopper template to be automatically started with the geometry from above.</p>
+          <p>This section could be added in the future. It would allow a Revit and Grasshopper template to be automatically generated using the geometry from above.</p>
         </div>
         <div class="col-4">
           <button class="btn-lg-navy btn-primary"  id="btnSend">DOWNLOAD .GH</button>
