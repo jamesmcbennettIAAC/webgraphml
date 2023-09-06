@@ -109,11 +109,12 @@ canvas {
 }
 
 .fs-1 {
-font-size: 5rem!important;
+font-size: 4.5rem!important;
 background-image: conic-gradient(#553c9a, #ee4b2b, #00c2cb);
 color: transparent;
 background-clip: text;
 -webkit-background-clip: text;
+padding-bottom: 50px;
 }
 
 .fs-2 {
@@ -121,8 +122,24 @@ background-image: conic-gradient(#ee4b2b, #00c2cb, #553c9a);
 color: transparent;
 background-clip: text;
 -webkit-background-clip: text;
+padding-bottom: 5px;
 }
 
+.fs-3 {
+    background-image: conic-gradient(#ee4b2b, #00c2cb, #553c9a);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+}
+
+.col {
+    padding: 10px 0px 10px 0px;
+}
 #map {
     width: 100%;
     height: 500px;
