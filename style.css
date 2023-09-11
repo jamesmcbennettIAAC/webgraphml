@@ -400,6 +400,13 @@ justify-content: center;
     margin: 0; /* Remove default margin to avoid extra spacing */
 }
 
+.col-md-6
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 /* Styling for the centered legend */
 .legend {
     display: flex; /* Use flexbox to align items horizontally */

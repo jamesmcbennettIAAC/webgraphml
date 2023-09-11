@@ -72,7 +72,7 @@ map.on('draw:created', function(event) {
                 
                 var distance = calculateDistance(firstLatLng, secondLatLng);
       
-                console.log('Distance between the first and second points: ' + distance.toFixed(2) + ' meters');
+                //console.log('Distance between the first and second points: ' + distance.toFixed(2) + ' meters');
             }
         } else {
             // Set the type property to 'Linear'
@@ -95,7 +95,7 @@ map.on('draw:created', function(event) {
                 
                 var distance = calculateDistance(firstLatLng, secondLatLng);
       
-                console.log('Distance between the first and second points: ' + distance.toFixed(2) + ' meters');
+                //console.log('Distance between the first and second points: ' + distance.toFixed(2) + ' meters');
             }
         }
   
@@ -192,7 +192,7 @@ function isCounterclockwise(points) {
 function ensureCounterclockwise(points) {
     if (isCounterclockwise(points)) {
         // If not counterclockwise, reverse the order
-        console.log("List was reversed to ensure counterclockwise order.");
+        //console.log("List was reversed to ensure counterclockwise order.");
         return points.reverse();
         
     }
@@ -397,7 +397,7 @@ document.getElementById('btnSend').addEventListener('click', function () {
     };
 
     // Do something with the dataObject (e.g., send it to the server)
-    console.log(dataObject);
+    console.log("JSON from front-end", dataObject);
     /*
     // DownloadJSON of dataObject
     // Convert the dataObject to JSON format
@@ -442,12 +442,16 @@ document.getElementById('btnSend').addEventListener('click', function () {
     */
 
     // Fetch API
+
+    var raw = JSON.stringify(dataObject)
+
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json", );
+
     var requestOptions = {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(dataObject),
+        headers: myHeaders,
+        body: raw,
         redirect: 'follow'
     };
 
@@ -457,9 +461,6 @@ document.getElementById('btnSend').addEventListener('click', function () {
         .then(result => console.log(result))
         .catch(error => console.log('error', error));
 });
-
-
-
 
 
 
