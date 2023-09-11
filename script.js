@@ -398,7 +398,7 @@ document.getElementById('btnSend').addEventListener('click', function () {
     console.log(dataObject);
 
 
-
+    /*
     // DownloadJSON of dataObject
     // Convert the dataObject to JSON format
     var jsonContent = JSON.stringify(dataObject, null, 2); // The '2' argument is for indentation
@@ -424,11 +424,9 @@ document.getElementById('btnSend').addEventListener('click', function () {
     downloadContainer.innerHTML = ''; // Clear previous content
     downloadContainer.appendChild(downloadLink);
 
-
-
-
-
-    /*
+    */
+   
+    
     // Fetch API
     var requestOptions = {
         method: 'POST',
@@ -439,12 +437,12 @@ document.getElementById('btnSend').addEventListener('click', function () {
         redirect: 'follow'
     };
 
-    //fetch("https://graphpost.fly.dev/process", requestOptions)
-    fetch("http://127.0.0.1:8000/process", requestOptions)
+    fetch("https://graphtestrun.fly.dev/process", requestOptions)
+    //fetch("http://127.0.0.1:8000/process", requestOptions)
         .then(response => response.text())
         .then(result => console.log(result))
         .catch(error => console.log('error', error));
-    */
+    
 });
 
 
