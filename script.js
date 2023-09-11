@@ -1,3 +1,7 @@
+import * as THREE from 'three'
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+
+
 // Initialize the map
 const map = L.map('map').setView([41.3973, 2.1925], 18); //coordinates of Barcelona
 
@@ -19,7 +23,7 @@ var drawControl = new L.Control.Draw({
 });
 map.addControl(drawControl);
 
-// Declare the scaledCoordinates globally
+// Declare JSONCoordinates globally
 var JSONCoordinates;
 
 // Function to calculate distance between two points in meters
@@ -334,8 +338,6 @@ document.addEventListener('DOMContentLoaded', function() {
 // Define dataObject in a scope accessible to both event handlers
 var dataObject;
 
-
-
 // Create a Javascript Object combining all browser inputs
 // Event handler for btnSend button click
 document.getElementById('btnSend').addEventListener('click', function () {
@@ -396,8 +398,6 @@ document.getElementById('btnSend').addEventListener('click', function () {
 
     // Do something with the dataObject (e.g., send it to the server)
     console.log(dataObject);
-
-
     /*
     // DownloadJSON of dataObject
     // Convert the dataObject to JSON format
@@ -440,7 +440,7 @@ document.getElementById('btnSend').addEventListener('click', function () {
         downloadAnchorNode.remove();
     });
     */
-    
+
     // Fetch API
     var requestOptions = {
         method: 'POST',
@@ -456,8 +456,347 @@ document.getElementById('btnSend').addEventListener('click', function () {
         .then(response => response.text())
         .then(result => console.log(result))
         .catch(error => console.log('error', error));
-    
 });
+
+
+
+
+
+
+//ThreeJS
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('navajowhite'); // Set background color to navajowhite
+
+// Setup Camera
+const camera = new THREE.PerspectiveCamera(130, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.up.set(0,0,1);
+camera.setFocalLength (35)
+camera.position.set(200, 200, 100); //setup the right camera to start with!
+
+// Setup Renderer
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight); // Can add 0.7* by window.innerWidth
+//document.body.appendChild(renderer.domElement);
+
+// Attach the canvas to canvasContainer, not to document to prevent three.js being at bottom of page.
+const canvasContainer = document.getElementById('canvasContainer');
+canvasContainer.appendChild(renderer.domElement);
+
+ // add a directional light
+ const directionalLight = new THREE.DirectionalLight(0xffffff, 0);
+ scene.add(directionalLight);
+ 
+ const ambientLight = new THREE.AmbientLight();
+ scene.add(ambientLight);
+
+ const light = new THREE.HemisphereLight( 0xffffbb, 0x080820, 5);
+ scene.add( light );
+
+ // Orbit
+const controls = new OrbitControls(camera, renderer.domElement);
+
+// Declare the units at high scope
+var coordinates = [];
+var predictedClass = [];
+var source = [];
+var target = [];
+var unit = [];
+var egress = [];
+var corridor = [];
+
+
+
+// Read the JSON file
+fetch('predictedGraph.json')
+  .then(response => response.json())
+  .then(data => {
+
+    // Debugging: Log the entire JSON data
+    //console.log('JSON Data:', data);
+
+    // Extract coordinates from the JSON data and format them
+
+
+    data.features.forEach(featureGroup => {
+        featureGroup.forEach(feature => {
+            if (feature && feature.node && feature.node.properties && feature.node.properties.metadata && feature.node.properties.metadata.geometry) {
+                const geometry = feature.node.properties.metadata.geometry.coordinates;
+                const [x, y, z] = geometry;
+                coordinates.push([x, y, z]);
+            }
+        });
+    });
+
+    data.features.forEach(featureGroup => {
+        featureGroup.forEach(feature => {
+            if (feature && feature.node && feature.node.properties && feature.node.properties.predictedClass) {
+                const classValue = feature.node.properties.predictedClass;
+                predictedClass.push(parseInt(classValue[0]));
+            }
+        });
+    });
+
+    data.features.forEach(featureGroup => {
+    featureGroup.forEach(feature => {
+        if (feature && feature.edge && feature.edge.properties && feature.edge.properties.source !== undefined) {
+        const sourceValue = feature.edge.properties.source;
+        source.push(parseInt(sourceValue));
+        }
+    });
+    });
+
+    data.features.forEach(featureGroup => {
+        featureGroup.forEach(feature => {
+        if (feature && feature.edge && feature.edge.properties && feature.edge.properties.target !== undefined) {
+            const targetValue = feature.edge.properties.target;
+            target.push(parseInt(targetValue));
+        }
+        });
+    });
+
+    
+
+    // Debugging: Log the coordinates
+    //console.log('Coordinates:', coordinates);
+
+    for (let i = 0; i < predictedClass.length; i++) {
+    const currentCoordinate = coordinates[i];
+    const currentClass = predictedClass[i];
+
+    switch (currentClass) {
+        case 0:
+        unit.push(currentCoordinate);
+        break;
+        case 1:
+        egress.push(currentCoordinate);
+        break;
+        case 2:
+        corridor.push(currentCoordinate);
+        break;
+        // Add more cases if you have more classes
+        default:
+        // Handle any other cases if needed
+        break;
+    }
+    }
+
+
+    // Specify the startPt, endPt, color, and thickness you want
+    createNode(scene, egress, 0xE0482F, 0.3);
+    createNode(scene, unit, 0x3868FF, 0.2);
+    createNode(scene, corridor, 0xFF8C7D, 0.2);
+
+    createEdge(scene, coordinates, source, target, predictedClass, 0.1);
+
+    var inputCoordinates = [[79.604578, 45.09543],[40.422679, -46.102012],[-76.240781, -37.299453],[-43.786476, 36.292871],[79.604578, 45.09543]];
+    createInputContext(scene,inputCoordinates, 1.2);
+
+
+
+})
+.catch(error => {
+  console.error('Error:', error);
+});
+
+
+// CreateGraph function, takes endPt and color to create a sphere at the endPt
+function createNode(scene, coordinate, color, thickness) {
+    const sphereMaterial = new THREE.MeshBasicMaterial({ color: color });
+
+    for (let i = 0; i < coordinate.length; i++) {
+        const end = new THREE.Vector3(coordinate[i][0], coordinate[i][1], coordinate[i][2]);
+        
+        // Add a sphere at the end point
+        const sphereGeometry = new THREE.SphereGeometry(thickness * 3, 16, 16);
+        const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        sphere.position.copy(end);
+        scene.add(sphere);
+    }
+}
+
+function createEdge(scene, coordinates, source, target, predictedClass, thickness) {
+    // Define colors and their corresponding values
+    const colors = {
+        0: 0x3868FF, // Blue
+        1: 0xE0482F, // Red
+        2: 0xFF8C7D, // Pink
+        3: 0x000080, // Navy
+    };
+
+    // Define thickness values for each class
+    const thicknessValues = {
+        0: 0.25, // Thickness for class 0
+        1: 0.5, // Thickness for class 1
+        2: 0.25, // Thickness for class 2
+        3: 0.45, // Thickness for class 2
+    };
+
+    // Loop through source and target arrays
+    for (let i = 0; i < source.length; i++) {
+        // Get the predictedClass values at source and target
+        const classSource = predictedClass[source[i]];
+        const classTarget = predictedClass[target[i]];
+
+        // Determine the color based on the predicted class values
+        const color = colors[classSource] || colors[classTarget] || 0xFF8C7D; // Default to pink
+
+        // Determine the thickness based on the predicted class values
+        const thicknessValue = thicknessValues[classSource] || thicknessValues[classTarget] || 0.2; // Default thickness
+
+        const cylinderMaterial = new THREE.MeshBasicMaterial({ color: color });
+
+        const start = new THREE.Vector3(
+            coordinates[source[i]][0],
+            coordinates[source[i]][1],
+            coordinates[source[i]][2]
+        );
+
+        const end = new THREE.Vector3(
+            coordinates[target[i]][0],
+            coordinates[target[i]][1],
+            coordinates[target[i]][2]
+        );
+
+        const direction = end.clone().sub(start);
+        const length = direction.length();
+
+        const cylinderGeometry = new THREE.CylinderGeometry(thicknessValue, thicknessValue, length, 8);
+        const cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
+
+        cylinder.position.copy(start.clone().add(end).multiplyScalar(0.5));
+
+        const quaternion = new THREE.Quaternion();
+        quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.clone().normalize());
+        cylinder.setRotationFromQuaternion(quaternion);
+
+        scene.add(cylinder);
+    }
+}
+
+/*
+// Function to create a polygon with specified properties
+function createPolygon(scene, vertices, scale, opacity) {
+    // Convert input coordinates to THREE.Vector3 instances
+    const vecPoints = vertices.map(vertex => new THREE.Vector3(...vertex));
+
+    // Create geometry and material
+    const color = new THREE.Color(0x000080);
+    const geometry = new THREE.BufferGeometry().setFromPoints(vecPoints);
+    const material = new THREE.MeshBasicMaterial({ color, transparent: true, opacity, side: THREE.DoubleSide });
+
+    // Create the polygon mesh
+    const polygonMesh = new THREE.Mesh(geometry, material);
+
+    // Scale the geometry from the center
+    polygonMesh.scale.set(scale, scale, 1);
+
+    scene.add(polygonMesh);
+}
+*/
+
+// Create a material with the specified color
+
+
+
+// Function to create two single-sided circles, one facing up and the other facing down, with different opacity
+function createInputContext(scene, coordinates, offsetDistance) {
+    // Calculate the maximum radius
+    let maxRadiusSq = 0;
+    coordinates.forEach(coord => {
+        const radiusSq = coord[0] * coord[0] + coord[1] * coord[1];
+        if (radiusSq > maxRadiusSq) {
+            maxRadiusSq = radiusSq;
+        }
+    });
+    const maxRadius = Math.sqrt(maxRadiusSq);
+
+    // Create the first circle geometry with the calculated radius and opacity
+    const circleGeometry1 = new THREE.CircleGeometry(maxRadius * offsetDistance, 254);
+    const circleMaterial1 = new THREE.MeshBasicMaterial({
+        color: 0x000080,
+        transparent: true,
+        opacity: 0.05, // Adjust opacity for the first circle
+        side: THREE.FrontSide, // Make the first circle single-sided and face up
+    });
+    const circle1 = new THREE.Mesh(circleGeometry1, circleMaterial1);
+
+    // Position the first circle on the XY plane (centered at 0, 0, 0)
+    circle1.position.set(0, 0, 0);
+
+    scene.add(circle1);
+
+    // Create the second circle geometry with the same radius and different opacity
+    const circleGeometry2 = new THREE.CircleGeometry(maxRadius * offsetDistance, 254);
+    const circleMaterial2 = new THREE.MeshBasicMaterial({
+        color: 0x000080,
+        transparent: true,
+        opacity: 0.8, // Adjust opacity for the second circle
+        side: THREE.BackSide, // Make the second circle single-sided and face down (opposite direction)
+    });
+    const circle2 = new THREE.Mesh(circleGeometry2, circleMaterial2);
+
+    // Position the second circle at the same position but slightly below the first one on the XY plane
+    circle2.position.set(0, 0, -1); // Adjust the Z position as needed
+
+    scene.add(circle2);
+
+
+    // Loop through the list of coordinates
+    for (let i = 0; i < coordinates.length - 1; i++) {
+        const color = 0x000080; // Default to Navy
+        const thicknessValue = 1; // Default thickness
+        const opacity = 0.3; // Opacity value
+
+        const cylinderMaterial = new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: opacity });
+
+        const start = new THREE.Vector3(
+            coordinates[i][0],
+            coordinates[i][1],
+            coordinates[i][2]
+        );
+
+        const end = new THREE.Vector3(
+            coordinates[i + 1][0],
+            coordinates[i + 1][1],
+            coordinates[i + 1][2]
+        );
+
+        const direction = end.clone().sub(start);
+        const length = direction.length();
+
+        const cylinderGeometry = new THREE.CylinderGeometry(thicknessValue, thicknessValue, length, 8);
+        const cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
+
+        cylinder.position.copy(start.clone().add(end).multiplyScalar(0.5));
+
+        const quaternion = new THREE.Quaternion();
+        quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.clone().normalize());
+        cylinder.setRotationFromQuaternion(quaternion);
+
+        scene.add(cylinder);
+    }
+}
+
+
+
+
+// Run
+// Animate
+const animate = () => {
+    requestAnimationFrame(animate);
+/*
+    lineSegments.rotation.x += 0.001;
+    lineSegments.rotation.y += 0.001;
+*/
+    controls.update();
+    renderer.render(scene, camera);
+};
+
+animate();
+
+
+
+
 
 
 

@@ -2,7 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Draw Polyline on Map</title>
+
+  <title>Cloud-Based Graph Machine Learning (CBGML)</title>
+  <meta property="og:title" content="Cloud-Based Graph Machine Learning (CBGML)">
+  <meta property="og:description" content="Thesis on graph-machine learning by Ren Rainville and James McBennett.">
+  <meta property="og:image" content="https://example.com/path/to/your-image.jpg">
+  <meta property="og:url" content="https://jamesmcbennettiaac.github.io/CloudBasedGraphMachineLearningFrontend/">
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
@@ -33,11 +38,11 @@
             <h3 class="fs-4">Thesis Supervisor: David Andrés León</h3>
         </div>
         <div class="col-md-6">
-            <p>This thesis applies knowledge gained from two IAAC MaCAD 2022/23 courses.</p>
-            <p>The first course delves into Cloud-Based Data Management, emphasizing front-end development using HTML, CSS, and JavaScript to interface with Rhino.Compute. This enables the display and control of Rhino3D or Grasshopper3D within a web browser.</p>
-            <p>The second course focuses on Graph-Machine Learning, utilizing graphs composed of edges and nodes to represent buildings. Machine learning techniques are employed to swiftly train a model for predicting node and edge classifications.</p>
-            <p>This thesis project centers on multi-story residential buildings and the prediction of egress locations using graph machine-learning (GML). This page initiates with leaflet.js maps, allowing users to search for any location in the world and then draw either a lineString or Polygon to represent linear or courtyard buildings. The coordinates of the curve are captured as pixel points, scaled according to known distances, relocated to the origin, reordered in a counter-clockwise fashion, and stored in a JavaScript object. Additional information, such as the number of floor levels and whether the building should be single-loaded or double-loaded on the corridor, is also recorded.</p>
-            <p>The JavaScript object gets transmitted to the backend as a JSON file by clicking 'CALCULATE GRAPH'. JSON allows for the storage of data using key-value pairs and arrays.</p>
+            <p>This thesis applies knowledge gained from two <b>IAAC MaCAD 2022/23</b> courses.</p>
+            <p><b>CLOUD-BASED DATA MANAGEMENT</b> emphasized front-end development using HTML, CSS, and JavaScript to interface with Rhino.Compute to control Rhino3D or Grasshopper3D geometry within a web browser.</p>
+            <p><b>GRAPH-MACHINE LEARNING</b> utilized graphs composed of edges and nodes to represent buildings. Machine learning techniques were employed to train a model for predicting node and edge classification.</p>
+            <p>This thesis centers on <b>PREDICTING EGRESS FOR MULTI-STORY RESIDENTIAL BUILDING</b> through graph machine learning (GML). The process commences with users outlining building geometry on a leaflet.js map. Coordinates are then processed, including scaling, repositioning to the origin, and rearranging counter-clockwise, followed by selecting floor count and corridor type. This data is then sent as a JSON to the back-end.</p>
+            <p style="font-weight: 100; font-size: 0.8em;">Special thanks to David Andrés León, Justyna Szychowska, Dai Kandil, Sara Kessba, and Lucas Sentís Fuster.</p>
         </div>
       </div>
     </div>
@@ -121,9 +126,31 @@
   <!--DownloadJSON-->
   <div id="download-container">
   </div>
-  
 
-  <div class="canvas-container" id="canvasContainer"></div>
+  <div class="canvas-container" id="canvasContainer">
+    <div class="sideTextCanvas"><p>Scroll page along edges</p></div>
+    <div class="legend">
+      <div class="legend-item">
+          <div class="legend-color" style="background-color: #3868FF;"></div> Units
+      </div>
+      <div class="legend-item">
+          <div class="legend-color" style="background-color: #E0482F;"></div> Egress
+      </div>
+      <div class="legend-item">
+          <div class="legend-color" style="background-color: #FF8C7D;"></div> Corridor
+      </div>
+      <div class="legend-item">
+          <div class="legend-color" style="background-color: #000080; opacity: 0.6;"></div> Input Geometry
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: #000080; opacity: 0.15;"></div> Ground Plane
+    </div>
+  </div>
+
+  </div>
+
+
+
     <!--<div id="loader"></div>-->
           <script type="importmap">
         {
@@ -133,7 +160,7 @@
           }
         }
         </script>
-    <script type="module" src="./graph.js"></script>
+    
   </div>
 
 
@@ -179,7 +206,7 @@
   <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
   <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-search/2.9.9/leaflet-search.min.js"></script>-->
-  <script src="script.js"></script>
+  <script type="module" src="script.js"></script>
 
   
 </body>
