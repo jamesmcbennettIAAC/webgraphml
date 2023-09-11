@@ -426,6 +426,20 @@ document.getElementById('btnSend').addEventListener('click', function () {
 
     */
    
+
+    /*
+    // Download polyline as a file
+    document.getElementById('download-btn').addEventListener('click', function () {
+        var geoJSON = drawnItems.toGeoJSON();
+        var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(geoJSON));
+        var downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute('href', dataStr);
+        downloadAnchorNode.setAttribute('download', 'polyline.geojson');
+        document.body.appendChild(downloadAnchorNode); // required for Firefox
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    });
+    */
     
     // Fetch API
     var requestOptions = {
@@ -448,37 +462,3 @@ document.getElementById('btnSend').addEventListener('click', function () {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-// Download polyline as a file
-document.getElementById('download-btn').addEventListener('click', function () {
-    var geoJSON = drawnItems.toGeoJSON();
-    var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(geoJSON));
-    var downloadAnchorNode = document.createElement('a');
-    downloadAnchorNode.setAttribute('href', dataStr);
-    downloadAnchorNode.setAttribute('download', 'polyline.geojson');
-    document.body.appendChild(downloadAnchorNode); // required for Firefox
-    downloadAnchorNode.click();
-    downloadAnchorNode.remove();
-});
-*/
