@@ -253,6 +253,7 @@ canvas {
 }
 
 .btn-lg-coral {
+    position: relative;
     width:100%;
     display: inline-block;
     padding: 20px 40px;
@@ -270,6 +271,27 @@ canvas {
     border: none;
 }
 
+.btn-lg-coral:disabled {
+    cursor: not-allowed;
+    position: relative; /* Add relative positioning */
+    text-align: center;
+    padding: 20px 40px;
+    height: 70px; /* Allow button height to adjust */
+}
+
+.btn-lg-coral[disabled] .spinner-border {
+    display: inline-block;
+    position: initial;
+    top: 50%; /* Vertically center the spinner */
+    left: 50%; /* Horizontally center the spinner */
+    width: 2rem;
+    height: 2rem;
+}
+
+.btn-lg-coral[disabled] span:not(.spinner-border) {
+    display: none;
+}
+  
 .image {
     position: relative;
 }

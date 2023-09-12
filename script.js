@@ -318,6 +318,7 @@ function decrement() {
 // JavaScript to toggle the switch
 var toggleCorridor = document.getElementById('toggleCorridor');
 var toggleLabels = document.querySelectorAll('.toggle-label');
+var btnSend = document.getElementById('btnSend');
 
 document.addEventListener('DOMContentLoaded', function() {
     // Attach the event listener for the toggleCorridor checkbox
@@ -329,9 +330,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Attach the event listener for the btnSend button
-    document.getElementById('btnSend').addEventListener('click', function () {
-        // Rest of the code remains the same...
+    btnSend.addEventListener('click', function () {
+        // Show the spinner
+        btnSend.setAttribute('disabled', 'true');
+        btnSend.querySelector('.spinner-border').style.display = 'inline-block';
+
     });
+
+    // Initially hide the spinner and enable the button
+    btnSend.querySelector('.spinner-border').style.display = 'none';
+    btnSend.removeAttribute('disabled');
 });
 
 
@@ -375,7 +383,10 @@ document.getElementById('btnSend').addEventListener('click', function () {
         }
     } else {
         alert('Please draw a polyline or polygon before sending data.');
-        return;
+        btnSend.removeAttribute('disabled');
+        btnSend.querySelector('.btn-text').style.display = 'inline-block';
+        btnSend.querySelector('.spinner-border').style.display = 'none'; 
+    return;
     }
 
     // Get the floorsInput value and the toggleCorridor checkbox state
@@ -383,7 +394,7 @@ document.getElementById('btnSend').addEventListener('click', function () {
     var toggleCorridor = document.getElementById('toggleCorridor').checked;
 
     // Create the JavaScript object with the collected data
-    var dataObject = {
+    dataObject = {
         type: "feature",
         geometry: {
             type: geometryType,
@@ -398,51 +409,8 @@ document.getElementById('btnSend').addEventListener('click', function () {
 
     // Do something with the dataObject (e.g., send it to the server)
     console.log("JSON from front-end", dataObject);
-    /*
-    // DownloadJSON of dataObject
-    // Convert the dataObject to JSON format
-    var jsonContent = JSON.stringify(dataObject, null, 2); // The '2' argument is for indentation
-
-    // Create a Blob with the JSON content
-    var blob = new Blob([jsonContent], { type: 'application/json' });
-
-    // Create a download link
-    var downloadLink = document.createElement('a');
-    downloadLink.href = URL.createObjectURL(blob);
-    downloadLink.download = 'dataObject.json'; // The filename for the downloaded file
-    downloadLink.innerText = 'Download JSON';
-    
-    // Apply CSS styling to the download link
-    downloadLink.style.display = 'block'; // To make the link a block element
-    downloadLink.style.textAlign = 'center'; // Center-align the text
-    downloadLink.style.fontSize = '38px'; // Make the text bigger
-    downloadLink.style.paddingTop = '50px'; // Add padding to the top
-    downloadLink.style.paddingBottom = '50px'; // Add padding to the bottom
-
-    // Append the download link to the DOM
-    var downloadContainer = document.getElementById('download-container');
-    downloadContainer.innerHTML = ''; // Clear previous content
-    downloadContainer.appendChild(downloadLink);
-
-    */
-   
-
-    /*
-    // Download polyline as a file
-    document.getElementById('download-btn').addEventListener('click', function () {
-        var geoJSON = drawnItems.toGeoJSON();
-        var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(geoJSON));
-        var downloadAnchorNode = document.createElement('a');
-        downloadAnchorNode.setAttribute('href', dataStr);
-        downloadAnchorNode.setAttribute('download', 'polyline.geojson');
-        document.body.appendChild(downloadAnchorNode); // required for Firefox
-        downloadAnchorNode.click();
-        downloadAnchorNode.remove();
-    });
-    */
 
     // Fetch API
-
     var raw = JSON.stringify(dataObject)
 
     var myHeaders = new Headers();
@@ -457,9 +425,25 @@ document.getElementById('btnSend').addEventListener('click', function () {
 
     fetch("https://graphtestrun.fly.dev/process", requestOptions)
     //fetch("http://127.0.0.1:8000/process", requestOptions)
-        .then(response => response.text())
-        .then(result => console.log(result))
-        .catch(error => console.log('error', error));
+    .then(response => response.text())
+    .then(result => {
+        // Re-enable the button and hide the spinner when the fetch request is completed
+        btnSend.removeAttribute('disabled');
+        btnSend.querySelector('.spinner-border').style.display = 'none';
+        btnSend.querySelector('.btn-text').style.display = 'inline';
+
+        // Handle the fetch response here
+        console.log(result);
+    })
+    .catch(error => {
+        // Re-enable the button and hide the spinner on error
+        btnSend.removeAttribute('disabled');
+        btnSend.querySelector('.spinner-border').style.display = 'none';
+        btnSend.querySelector('.btn-text').style.display = 'inline';
+
+        // Handle the fetch error here
+        console.error('Error:', error);
+    });
 });
 
 

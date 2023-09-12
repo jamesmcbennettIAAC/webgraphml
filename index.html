@@ -73,7 +73,7 @@
     <div class="container">
       <div class="row">
         <div class="col">
-          <h1 class="fw-bolder fs-3">MaCAD</h1>
+          <h1 class="fw-bolder fs-3">Draw</h1>
         </div>
         <div class="col">
           <button class="btn-navy btn-primary" id="btn1">Linear Building</button>
@@ -115,7 +115,10 @@
           <p style="text-align: left;">The Calculate Graph button sends a JSON to the backend to use Rhino.Compute. It returns a JSON with node and edge classification.</p>
         </div>
         <div class="col-4">
-          <button class="btn-lg-coral btn-primary"  id="btnSend">CALCULATE GRAPH</button>
+          <button type="button" class="btn-lg-coral btn-primary" id="btnSend">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span class="btn-text">CALCULATE GRAPH</span>
+          </button>
           <div id="output"></div>
         </div>
         <div class="col-4">
@@ -169,7 +172,7 @@
 
   <div class="container-6">
     <div class="container">
-      <h1><b>Further Development</b></h1>
+      <h1 class="fw-bolder fs-3">Further Development</h1>
       <div class="row">
         <div class="col-4">
           <button class="btn-lg-navy btn-primary"  id="btnSend">DOWNLOAD .RVT</button>
