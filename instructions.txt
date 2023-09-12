@@ -1,1 +1,0 @@
-The graph.js .3m .css were all part of a test to display a graph below the current front-end. Currently removed.

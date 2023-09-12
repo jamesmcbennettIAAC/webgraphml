@@ -318,7 +318,14 @@ function decrement() {
 // JavaScript to toggle the switch
 var toggleCorridor = document.getElementById('toggleCorridor');
 var toggleLabels = document.querySelectorAll('.toggle-label');
-var btnSend = document.getElementById('btnSend');
+var dataObject; // Define dataObject in a scope accessible to both event handlers
+var btnSend = document.getElementById('btnSend'); // Define btnSend
+
+function resetButton() {
+    btnSend.removeAttribute('disabled');
+    btnSend.querySelector('.btn-text').style.display = 'inline-block';
+    btnSend.querySelector('.spinner-border').style.display = 'none';
+}
 
 document.addEventListener('DOMContentLoaded', function() {
     // Attach the event listener for the toggleCorridor checkbox
@@ -331,20 +338,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Attach the event listener for the btnSend button
     btnSend.addEventListener('click', function () {
-        // Show the spinner
-        btnSend.setAttribute('disabled', 'true');
+        btnSend.setAttribute('disabled', 'true'); // Show the spinner
+        btnSend.querySelector('.btn-text').style.display = 'none';
         btnSend.querySelector('.spinner-border').style.display = 'inline-block';
-
+        //setTimeout(function () {resetButton();}, 2000); // Timeout,reset button 2 seconds
     });
-
-    // Initially hide the spinner and enable the button
-    btnSend.querySelector('.spinner-border').style.display = 'none';
-    btnSend.removeAttribute('disabled');
+    resetButton(); // Initially hide the spinner and enable the button
 });
-
-
-// Define dataObject in a scope accessible to both event handlers
-var dataObject;
 
 // Create a Javascript Object combining all browser inputs
 // Event handler for btnSend button click
@@ -378,16 +378,17 @@ document.getElementById('btnSend').addEventListener('click', function () {
                 });
             }
         } else {
-            alert('Please draw a polyline or polygon before sending data.');
+            alert('Draw a Linear or Courtyard Building before sending data.');
+            setTimeout(function () {resetButton();}, 1000); // Timeout button 1 second
             return;
         }
     } else {
-        alert('Please draw a polyline or polygon before sending data.');
-        btnSend.removeAttribute('disabled');
-        btnSend.querySelector('.btn-text').style.display = 'inline-block';
-        btnSend.querySelector('.spinner-border').style.display = 'none'; 
+        alert('Draw a Linear or Courtyard Building before sending data.');
+        setTimeout(function () {resetButton();}, 1000); // Timeout button 1 second
     return;
     }
+
+
 
     // Get the floorsInput value and the toggleCorridor checkbox state
     var floorsInput = parseInt(document.getElementById('floorsInput').value);
@@ -428,18 +429,14 @@ document.getElementById('btnSend').addEventListener('click', function () {
     .then(response => response.text())
     .then(result => {
         // Re-enable the button and hide the spinner when the fetch request is completed
-        btnSend.removeAttribute('disabled');
-        btnSend.querySelector('.spinner-border').style.display = 'none';
-        btnSend.querySelector('.btn-text').style.display = 'inline';
+        resetButton();
 
         // Handle the fetch response here
         console.log(result);
     })
     .catch(error => {
         // Re-enable the button and hide the spinner on error
-        btnSend.removeAttribute('disabled');
-        btnSend.querySelector('.spinner-border').style.display = 'none';
-        btnSend.querySelector('.btn-text').style.display = 'inline';
+        resetButton();
 
         // Handle the fetch error here
         console.error('Error:', error);
