@@ -108,6 +108,18 @@ canvas {
     align-items: center;
     justify-content: center;
 }
+
+.container-7 {
+    width: 100%; /* Adjust width as needed */
+    height: 100%; /* Adjust height as needed */
+    background: navy;
+    color: navajowhite;
+    padding: 15px 0 15px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    }
     
 * {
     font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -120,7 +132,7 @@ canvas {
     color: transparent;
     background-clip: text;
     -webkit-background-clip: text;
-    padding-bottom: 50px;
+    padding-bottom: 15px;
 }
 
 .fs-2 {
@@ -128,7 +140,7 @@ canvas {
     color: transparent;
     background-clip: text;
     -webkit-background-clip: text;
-    padding-bottom: 5px;
+    padding-bottom: 0px;
 }
 
 .fs-3 {
@@ -209,7 +221,9 @@ canvas {
 }
 
 .btn-navy {
-    display: inline-block;
+    display: flex!important;
+    align-items: center!important;
+    justify-content: center!important;
     padding: 10px 20px;
     text-align: center;
     font-size: 15px;
@@ -223,7 +237,9 @@ canvas {
 }
 
 .btn-lg-navy {
-    display: inline-block;
+    display: flex!important;
+    align-items: center!important;
+    justify-content: center!important;
     padding: 20px 40px;
     text-align: center;
     font-size: 20px;
@@ -239,8 +255,29 @@ canvas {
     border: none;
 }
 
+.btn-lg-navajowhite {
+    display: flex!important;
+    align-items: center!important;
+    justify-content: center!important;
+    padding: 20px 40px;
+    text-align: center;
+    font-size: 20px;
+    background-color: navajowhite;
+    color: navy;
+    border: none;
+    /*border-radius: 10px;*/
+}
+
+.btn-navajowhite:hover, .btn-lg-navajowhite:hover {
+    background-color: navy;
+    color: navajowhite;
+    border: none;
+}
+
 .btn-coral {
-    display: inline-block;
+    display: flex!important;
+    align-items: center!important;
+    justify-content: center!important;
     padding: 10px 20px;
     height: 60px;
     text-align: center;
@@ -253,6 +290,9 @@ canvas {
 }
 
 .btn-lg-coral {
+    display: flex!important;
+    align-items: center!important;
+    justify-content: center!important;
     position: relative;
     width:100%;
     display: inline-block;
@@ -407,7 +447,13 @@ input[type="checkbox"] {
     background-color: transparent;
     color: navy;
 }
-
+.col-6 {
+    min-height: 75px;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 /* Create Graph Vertically alignment using col-4 which is 4 spaces of 12 grid, i.e. 3 columns*/
 .col-4{
 display: flex;
@@ -452,6 +498,18 @@ justify-content: center;
     margin-right: 5px;
 }
 
+.sideTextTop {
+    color: navajowhite;
+    font-size: 20px;
+    font-weight: bold;
+    position: absolute;
+    right: 0; /* Adjust the distance from the right as needed */
+    top: 100px;
+    transform: rotate(-90deg);
+    white-space: nowrap; /* Prevent text from wrapping */
+
+}
+
 .sideTextCanvas {
     color: navy;
     position: absolute;
@@ -459,5 +517,35 @@ justify-content: center;
     top: 50px;
     transform: rotate(-90deg);
     white-space: nowrap; /* Prevent text from wrapping */
-
 }
+
+.icon-container {
+    position: relative;
+    display: flex!important;
+    flex-direction: column!important;
+    align-items: center!important;
+    color: white;
+    padding: 0 10px 0 10px;
+  }
+
+  .icon-container img {
+    display: flex;
+    margin: 0 auto;
+  }
+
+  .icon-container:hover img,
+  .icon-container:hover p {
+    color: coral; /* Change text color to blue on hover */
+  }
+
+  .icon-container .linkedin-blue {
+    display: none; /* Initially hide the blue LinkedIn icon */
+  }
+
+  .icon-container:hover .linkedin-white {
+    display: none; /* Hide the white LinkedIn icon on hover */
+  }
+
+  .icon-container:hover .linkedin-blue {
+    display: inline-block; /* Show the blue LinkedIn icon on hover */
+  }

@@ -32,6 +32,7 @@
 <body>
   <div class="container-1">
     <div class="container">
+      <div class="sideTextTop"><p>THESIS</p></div>
       <div class="row">
         <div class="col-md-6">
             <h1 class="fw-bolder fs-1">Cloud-Based Graph Machine Learning (CBGML)</h1>
@@ -72,19 +73,19 @@
   <div class="container-4">
     <div class="container">
       <div class="row">
-        <div class="col">
+        <div class="col-6 col-lg-2">
           <h1 class="fw-bolder fs-3">Draw</h1>
         </div>
-        <div class="col">
+        <div class="col-6 col-lg-2">
           <button class="btn-navy btn-primary" id="btn1">Linear Building</button>
         </div>
-        <div class="col">
+        <div class="col-6 col-lg-2">
           <button class="btn-navy btn-primary" id="btn2">Courtyard Building</button>
         </div>
-        <div class="col">
+        <div class="col-6 col-lg-2">
           <button class="btn-navy btn-primary" id="btn3">Delete Building</button>
         </div>
-        <div class="col">
+        <div class="col-6 col-lg-2">
             <label>
                 <div class="custom-number-input">
                     <button class="decrement">-</button>
@@ -94,7 +95,7 @@
                 Floors
             </label>
         </div>
-        <div class="col">
+        <div class="col-6 col-lg-2">
           <label class="toggle" for="toggleCorridor">
             <input type="checkbox" id="toggleCorridor">
             <span class="toggle-label left">Single</span>
@@ -134,56 +135,79 @@
 
   <div class="canvas-container" id="canvasContainer">
     <div class="sideTextCanvas"><p>Scroll page along edges</p></div>
-    <div class="legend">
-      <div class="legend-item">
-          <div class="legend-color" style="background-color: #3868FF;"></div> Units
+      <div class="legend">
+          <div class="legend-item">
+              <div class="legend-color" style="background-color: #3868FF;"></div> Units
+          </div>
+          <div class="legend-item">
+              <div class="legend-color" style="background-color: #E0482F;"></div> Egress
+          </div>
+          <div class="legend-item">
+              <div class="legend-color" style="background-color: #FF8C7D;"></div> Corridor
+          </div>
+          <div class="legend-item">
+              <div class="legend-color" style="background-color: #000080; opacity: 0.6;"></div> Input Geometry
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background-color: #000080; opacity: 0.15;"></div> Ground Plane
+          </div>
       </div>
-      <div class="legend-item">
-          <div class="legend-color" style="background-color: #E0482F;"></div> Egress
-      </div>
-      <div class="legend-item">
-          <div class="legend-color" style="background-color: #FF8C7D;"></div> Corridor
-      </div>
-      <div class="legend-item">
-          <div class="legend-color" style="background-color: #000080; opacity: 0.6;"></div> Input Geometry
-      </div>
-      <div class="legend-item">
-        <div class="legend-color" style="background-color: #000080; opacity: 0.15;"></div> Ground Plane
     </div>
-  </div>
-
-  </div>
-
-
-
     <!--<div id="loader"></div>-->
-          <script type="importmap">
+      <script type="importmap">
         {
           "imports": {
             "three": "https://unpkg.com/three@0.147.0/build/three.module.js",
             "three/addons/": "https://unpkg.com/three@0.147.0/examples/jsm/"
           }
         }
-        </script>
-    
+      </script>
   </div>
-
 
 
   <div class="container-6">
     <div class="container">
-      <h1 class="fw-bolder fs-3">Further Development</h1>
+      <h1 class="fw-bolder fs-3">Future Development</h1>
       <div class="row">
         <div class="col-4">
-          <button class="btn-lg-navy btn-primary"  id="btnSend">DOWNLOAD .RVT</button>
+          <button class="btn-lg-navajowhite btn-primary"  id="btnRvt">DOWNLOAD .RVT</button>
         </div>
         <div class="col-4">
-          <p>This section could be added in the future. It would allow a Revit and Grasshopper template to be automatically generated using the geometry from above.</p>
+          <p>These features may be introduced at a later date, enabling the automatic generation of Revit and Grasshopper templates based on the geometry provided above.</p>
         </div>
         <div class="col-4">
-          <button class="btn-lg-navy btn-primary"  id="btnSend">DOWNLOAD .GH</button>
+          <button class="btn-lg-navajowhite btn-primary"  id="btnGh">DOWNLOAD .GH</button>
         </div>
       </div>
+    </div>
+  </div>
+
+
+  <div class="container-7"> 
+    <h1 class="fw-bolder fs-3">Further Information</h1>
+  </div>
+  <div class="container-7"> 
+    <div class="row"></div>
+    <div class="icon-container">
+      <a href="https://www.linkedin.com/in/ren-rainville/" target="_blank">
+        <img src="linkedinwhite.png" alt="LinkedIn Icon White" width="80" height="80" class="linkedin-white mb-2">
+        <img src="linkedinblue.png" alt="LinkedIn Icon Blue" width="80" height="80" class="linkedin-blue mb-2">
+        <p>Ren</p>
+      </a>
+    </div>
+    <div class="icon-container">
+      <a href="https://www.linkedin.com/in/mcbennett/" target="_blank">
+        <img src="linkedinwhite.png" alt="LinkedIn Icon White" width="80" height="80" class="linkedin-white mb-2">
+        <img src="linkedinblue.png" alt="LinkedIn Icon Blue" width="80" height="80" class="linkedin-blue mb-2">
+        <p>James</p>
+      </a>
+    </div>
+    <div class="icon-container">
+      <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">
+        <img src="pdfwhite.png" alt="LinkedIn Icon White" width="80" height="80" class="linkedin-white mb-2">
+        <img src="pdfred.png" alt="LinkedIn Icon Blue" width="80" height="80" class="linkedin-blue mb-2">
+        <p>thesis.pdf</p>
+      </a>
     </div>
   </div>
   <!--

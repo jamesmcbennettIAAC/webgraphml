@@ -299,7 +299,11 @@ document.getElementById('btn3').addEventListener('click', function() {
     document.getElementById('coordinates').innerHTML = ''; // Clear displayed coordinates
 });
 
-
+// Bottom Buttons
+var btnRvt = document.getElementById("btnRvt");
+var btnGh = document.getElementById("btnGh");
+btnRvt.addEventListener("click", function() {alert("A Revit template from the design above could be readily downloadable, complete with predefined levels for immediate use.");}); // Revit button
+btnGh.addEventListener("click", function() {alert("A readily downloadable Grasshopper file of the design above would be available for users, enabling them to extend and refine their projects with ease.");}); // Revit button
 
 
 // Corridor Single or Double
