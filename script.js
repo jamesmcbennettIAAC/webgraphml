@@ -300,18 +300,6 @@ document.getElementById('btn3').addEventListener('click', function() {
 });
 
 
-// Up down arrows on num input
-const floorsInput = document.getElementById("floorsInput");
-
-function increment() {
-  floorsInput.value = parseInt(floorsInput.value, 10) + 1;
-}
-
-function decrement() {
-  if (floorsInput.value > 1) {
-    floorsInput.value = parseInt(floorsInput.value, 10) - 1;
-  }
-}
 
 
 // Corridor Single or Double
@@ -328,6 +316,25 @@ function resetButton() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    
+    var floorsInput = document.getElementById("floorsInput");
+
+    function increment() {
+        floorsInput.value = parseInt(floorsInput.value, 10) + 1;
+    }
+    
+    function decrement() {
+        if (floorsInput.value > 1) {
+            floorsInput.value = parseInt(floorsInput.value, 10) - 1;
+        }
+    }
+    
+    // Attach event listeners to buttons
+    var incrementButton = document.querySelector(".increment");
+    var decrementButton = document.querySelector(".decrement");
+    incrementButton.addEventListener("click", increment);
+    decrementButton.addEventListener("click", decrement);
+    
     // Attach the event listener for the toggleCorridor checkbox
     toggleCorridor.addEventListener('click', function() {
         // Toggle the labels' background colors

@@ -85,14 +85,14 @@
           <button class="btn-navy btn-primary" id="btn3">Delete Building</button>
         </div>
         <div class="col">
-          <label>
-            <div class="custom-number-input">
-              <button class="decrement" onclick="decrement()">-</button>
-              <input type="text" id="floorsInput" value="4">
-              <button class="increment" onclick="increment()">+</button>
-            </div>
-            Floors
-          </label>
+            <label>
+                <div class="custom-number-input">
+                    <button class="decrement">-</button>
+                    <input type="text" id="floorsInput" value="4">
+                    <button class="increment">+</button>
+                </div>
+                Floors
+            </label>
         </div>
         <div class="col">
           <label class="toggle" for="toggleCorridor">
@@ -112,7 +112,7 @@
     <div class="container">
       <div class="row">
         <div class="col-4">
-          <p style="text-align: left;">The Calculate Graph button sends a JSON to the backend to use Rhino.Compute. It returns a JSON with node and edge classification.</p>
+          <p style="text-align: left;">This button sends a JSON containing your inputs to the backend. JSON is a lightweight data storage interchange format that uses key-value pairs.</p>
         </div>
         <div class="col-4">
           <button type="button" class="btn-lg-coral btn-primary" id="btnSend">
@@ -122,7 +122,7 @@
           <div id="output"></div>
         </div>
         <div class="col-4">
-          <p style="text-align: right;">A graph will appear below, drawn using three.js, that employs spheres for nodes and cylinders for edges. Data is extracted from a JSON file provided by the backend, organizing coordinates based on their classification. Blue indicates rooms, pink as corridors, and red denote egress.</p>
+          <p style="text-align: right;">It will return another JSON containing all of the nodes and edges, each classified as Units, Egress, or Corridor. A graph is displayed below built in three.js using this data.</p>
         </div>
       </div>
     </div>
