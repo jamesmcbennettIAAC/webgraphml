@@ -111,7 +111,7 @@ canvas {
 
 .container-7 {
     width: 100%; /* Adjust width as needed */
-    height: 100%; /* Adjust height as needed */
+    height: 10%; /* Adjust height as needed */
     background: navy;
     color: navajowhite;
     padding: 15px 0 15px 0;
@@ -255,7 +255,7 @@ canvas {
     border: none;
 }
 
-.btn-lg-navajowhite {
+.btn-navajowhite {
     display: flex!important;
     align-items: center!important;
     justify-content: center!important;
@@ -265,6 +265,7 @@ canvas {
     background-color: navajowhite;
     color: navy;
     border: none;
+    margin-bottom: 20px;
     /*border-radius: 10px;*/
 }
 
@@ -525,7 +526,7 @@ justify-content: center;
     flex-direction: column!important;
     align-items: center!important;
     color: white;
-    padding: 0 10px 0 10px;
+    padding: 20px 10px 0 10px;
   }
 
   .icon-container img {
