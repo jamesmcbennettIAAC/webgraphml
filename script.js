@@ -322,15 +322,10 @@ const container6 = document.querySelector('.container-6');
 // Function to toggle the container's height
 function toggleContainerHeight() {
     if (!btnClicked) {
-        canvasContainer.style.height = '100%';
         canvasContainer.classList.toggle('hidden');
         container6.classList.toggle('hidden');
         btnClicked = true;
-    } else {
-        canvasContainer.style.height = '0';
-        container6.style.height = '0';
-        btnClicked = false;
-    }
+    } 
 }
 
 
