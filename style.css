@@ -45,6 +45,16 @@ canvas {
     font-weight: bold;
     }
 
+.container-3 {
+    background: navajowhite;
+    padding: 20px 0 5px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: navy;
+    }
+
 /*Map Coordinates*/
 #coordinates {
     display: flex;
