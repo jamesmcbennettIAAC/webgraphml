@@ -63,7 +63,8 @@ canvas {
 /*Map Coordinates*/
 #coordinates {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     background: navajowhite;
     }
 
@@ -73,28 +74,29 @@ canvas {
     color: navy;
     text-align: center;
     font-weight: bold;
-    padding: 10px 0 0px 0;
+    padding: 15px;
     background-image: conic-gradient(#ee4b2b, #00c2cb, #553c9a);
     color: transparent;
     background-clip: text;
     -webkit-background-clip: text;
-    margin-bottom: 2px;
+    margin-bottom: 0px; /*cancel out from elsewhere*/
     }
 
 #coordinates ul {
-    font-size: 1em;
+    font-size: 0.8em;
     background-color: coral;
     display: flex;
     justify-content: space-evenly;
     list-style-type: none;
-    padding: 0px 0 5px 0;
+    padding: 15px;
     margin: 0px;
     background-image: conic-gradient(#ee4b2b, #00c2cb, #553c9a);
     color: transparent;
     background-clip: text;
     -webkit-background-clip: text;
-    font-style: oblique;
-    text-decoration: underline;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    align-items: left;
     }
 
 /*Buttons*/

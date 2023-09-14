@@ -454,7 +454,11 @@ document.getElementById('btnSend').addEventListener('click', function () {
     //fetch("https://graphtestrun.fly.dev/process", requestOptions)
     fetch("https://graphmlwebapp.fly.dev/process", requestOptions)
     //fetch("http://127.0.0.1:8000/process", requestOptions)
-    .then(response => response.text())
+    //.then(response => response.text())
+    .then(response => {
+        //console.log("Response from backend", response);
+        return response.text();
+    })
     .then(result => {
         // Re-enable the button and hide the spinner when the fetch request is completed
         resetButton();
