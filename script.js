@@ -435,11 +435,10 @@ document.getElementById('btnSend').addEventListener('click', function () {
         }
     };
 
-    // Do something with the dataObject (e.g., send it to the server)
-    console.log("JSON from front-end", dataObject);
-
     // Fetch API
     var raw = JSON.stringify(dataObject)
+
+    console.log("JSON from frontend", raw);
 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json", );
@@ -461,9 +460,9 @@ document.getElementById('btnSend').addEventListener('click', function () {
         resetButton();
 
         // Handle the fetch response here
-        console.log(result);
+        console.log("JSON from backend", result);
         var data = JSON.parse(result);
-        console.log(data);
+        //console.log(data);
 
 
         // Assuming 'data' contains the parsed JSON response
