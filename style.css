@@ -11,6 +11,13 @@ canvas {
 
 .canvas-container {
     position: relative;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease; /* Add a smooth transition */
+}
+
+.hidden {
+    display: none!important;
 }
 
 .row {
@@ -49,29 +56,39 @@ canvas {
     }
 
 #coordinates h5 {
-    font-size: 1em;
+    font-size: 1.7em;
     text-transform: uppercase;
-    color: navajowhite;
+    color: navy;
     text-align: center;
     font-weight: bold;
-    padding: 15px 0 10px 0;
-    background-color: navy;
+    padding: 10px 0 0px 0;
+    background-image: conic-gradient(#ee4b2b, #00c2cb, #553c9a);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    margin-bottom: 2px;
     }
 
 #coordinates ul {
     font-size: 1em;
-    color: navy;
+    background-color: coral;
     display: flex;
     justify-content: space-evenly;
     list-style-type: none;
-    padding-bottom: 10px;
+    padding: 0px 0 5px 0;
     margin: 0px;
+    background-image: conic-gradient(#ee4b2b, #00c2cb, #553c9a);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    font-style: oblique;
+    text-decoration: underline;
     }
 
 /*Buttons*/
 .container-4 {
     background: coral;
-    padding: 20px 0 0px 0;
+    padding: 20px 0 5px 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -234,6 +251,7 @@ canvas {
     height: 50px;
     width: 170px;
     border: 2px solid navy;
+    margin: 0px 0 10px 0;
 }
 
 .btn-lg-navy {
@@ -269,9 +287,28 @@ canvas {
     /*border-radius: 10px;*/
 }
 
-.btn-navajowhite:hover, .btn-lg-navajowhite:hover {
+.btn-lg-navajowhite {
+    display: flex!important;
+    align-items: center!important;
+    justify-content: center!important;
+    padding: 20px 40px;
+    text-align: center;
+    font-size: 20px;
+    background-color: navajowhite;
+    color: navy;
+    border: none;
+    /*border-radius: 10px;*/
+}
+
+.btn-navajowhite:hover  {
     background-color: navy;
     color: navajowhite;
+    border: none;
+}
+
+.btn-lg-navajowhite:hover {
+    background-color: coral;
+    color: navy;
     border: none;
 }
 
@@ -460,6 +497,7 @@ input[type="checkbox"] {
 display: flex;
 flex-direction: column;
 justify-content: center;
+align-items: center;
 }
 
 .col-4 p {
@@ -483,9 +521,21 @@ justify-content: center;
     align-items: center; /* Center items vertically */
     color: navy;
     margin-top: 60px;
-    font-size: 1.2em;
-
+    font-size: 1.7em;
+    flex-direction: column;
 }
+
+.legend-line {
+    display: flex;
+    padding: 5px 0 5px 0;
+}
+
+.legend-line2 {
+    display: flex;
+    padding: 5px 0 5px 0;
+    font-size: 0.6em!important;
+}
+
 
 /* Styling for legend items */
 .legend-item {
@@ -493,10 +543,24 @@ justify-content: center;
     display: flex;
 }
 
+.legend-item-circle {
+    margin-right: 20px;
+    display: flex;
+    align-items: center; /* Align content vertically in the middle */
+    justify-content: center;
+}
+
 /* Styling for legend color boxes */
 .legend-color {
     width: 40px;
     margin-right: 5px;
+}
+
+.legend-north {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    border-radius: 50%;
 }
 
 .sideTextTop {
@@ -514,10 +578,11 @@ justify-content: center;
 .sideTextCanvas {
     color: navy;
     position: absolute;
-    right: 0; /* Adjust the distance from the right as needed */
+    right: 50px; /* Adjust the distance from the right as needed */
     top: 50px;
     transform: rotate(-90deg);
     white-space: nowrap; /* Prevent text from wrapping */
+    transform-origin: right center;
 }
 
 .icon-container {
@@ -539,14 +604,14 @@ justify-content: center;
     color: coral; /* Change text color to blue on hover */
   }
 
-  .icon-container .linkedin-blue {
+  .icon-container .iconHover {
     display: none; /* Initially hide the blue LinkedIn icon */
   }
 
-  .icon-container:hover .linkedin-white {
+  .icon-container:hover .icon {
     display: none; /* Hide the white LinkedIn icon on hover */
   }
 
-  .icon-container:hover .linkedin-blue {
+  .icon-container:hover .iconHover {
     display: inline-block; /* Show the blue LinkedIn icon on hover */
   }

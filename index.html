@@ -74,7 +74,7 @@
     <div class="container">
       <div class="row">
         <div class="col-6 col-lg-2">
-          <h1 class="fw-bolder fs-3">Draw</h1>
+          <h1 class="fw-bolder fs-3">Thesis</h1>
         </div>
         <div class="col-6 col-lg-2">
           <button class="btn-navy btn-primary" id="btn1">Linear Building</button>
@@ -133,24 +133,35 @@
   <div id="download-container">
   </div>
 
-  <div class="canvas-container" id="canvasContainer">
+  <div class="canvas-container hidden" id="canvasContainer">
     <div class="sideTextCanvas"><p>Scroll page along edges</p></div>
       <div class="legend">
-          <div class="legend-item">
-              <div class="legend-color" style="background-color: #3868FF;"></div> Units
+          <div class="legend-line">
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #3868FF;"></div> Units
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #E0482F;"></div> Egress
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #FF8C7D;"></div> Corridor
+            </div>
           </div>
-          <div class="legend-item">
-              <div class="legend-color" style="background-color: #E0482F;"></div> Egress
+          <div class="legend-line2">
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #000080; opacity: 0.6;"></div> Input Geometry
+            </div>
+            <div class="legend-item">
+              <div class="legend-color" style="background-color: #000080; opacity: 0.15;"></div> Ground Plane
+            </div>
+            <div class="legend-item-circle">
+              <div class="legend-north" style="background-color: #000080; opacity: 1;"></div> North
+            </div>
           </div>
-          <div class="legend-item">
-              <div class="legend-color" style="background-color: #FF8C7D;"></div> Corridor
+          <div class="legend-line2">
+            <span id="max-radius"></span>
           </div>
-          <div class="legend-item">
-              <div class="legend-color" style="background-color: #000080; opacity: 0.6;"></div> Input Geometry
-          </div>
-          <div class="legend-item">
-            <div class="legend-color" style="background-color: #000080; opacity: 0.15;"></div> Ground Plane
-          </div>
+        </div>
       </div>
     </div>
     <!--<div id="loader"></div>-->
@@ -165,7 +176,7 @@
   </div>
 
 
-  <div class="container-6">
+  <div class="container-6 hidden">
     <div class="container">
       <div class="row">
         <div class="col-4">
@@ -175,15 +186,12 @@
           <p>These features may be introduced at a later date, enabling the automatic generation of Revit and Grasshopper templates based on the geometry provided above.</p>
         </div>
         <div class="col-4">
-          <button class="btn-navajowhite btn-primary"  id="btnRvt">.RVT</button>
-          <button class="btn-navajowhite btn-primary"  id="btnGh">.GH</button>
+          <button class="btn-navy btn-primary"  id="btnRvt" style="display: flex; align-items:center!important; justify-content:center!important;">.RVT</button>
+          <button class="btn-navy btn-primary"  id="btnGh">.GH</button>
         </div>
       </div>
     </div>
   </div>
-
-
-
 
   <div class="container-7"> 
     <div class="row"></div>
@@ -192,23 +200,30 @@
     </div>
     <div class="icon-container">
       <a href="https://www.linkedin.com/in/ren-rainville/" target="_blank">
-        <img src="linkedinwhite.png" alt="LinkedIn Icon White" width="80" height="80" class="linkedin-white mb-2">
-        <img src="linkedinblue.png" alt="LinkedIn Icon Blue" width="80" height="80" class="linkedin-blue mb-2">
+        <img src="linkedinwhite.png" alt="icon" width="80" height="80" class="icon mb-2">
+        <img src="linkedinblue.png" alt="iconHover" width="80" height="80" class="iconHover mb-2">
         <p>Ren</p>
       </a>
     </div>
     <div class="icon-container">
       <a href="https://www.linkedin.com/in/mcbennett/" target="_blank">
-        <img src="linkedinwhite.png" alt="LinkedIn Icon White" width="80" height="80" class="linkedin-white mb-2">
-        <img src="linkedinblue.png" alt="LinkedIn Icon Blue" width="80" height="80" class="linkedin-blue mb-2">
+        <img src="linkedinwhite.png" alt="icon" width="80" height="80" class="icon mb-2">
+        <img src="linkedinblue.png" alt="iconHover" width="80" height="80" class="iconHover mb-2">
         <p>James</p>
       </a>
     </div>
     <div class="icon-container">
       <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">
-        <img src="pdfwhite.png" alt="LinkedIn Icon White" width="80" height="80" class="linkedin-white mb-2">
-        <img src="pdfred.png" alt="LinkedIn Icon Blue" width="80" height="80" class="linkedin-blue mb-2">
+        <img src="pdfwhite.png" alt="icon" width="80" height="80" class="icon mb-2">
+        <img src="pdfred.png" alt="iconHover" width="80" height="80" class="iconHover mb-2">
         <p>thesis.pdf</p>
+      </a>
+    </div>
+    <div class="icon-container">
+      <a href="https://iaac.net/educational-programmes/masters-programmes/macad/" target="_blank">
+        <img src="iaacwhite.png" alt="icon" width="80" height="80" class="icon mb-2">
+        <img src="iaaccoral.png" alt="iconHover" width="80" height="80" class="iconHover mb-2">
+        <p>IAAC MaCAD</p>
       </a>
     </div>
   </div>

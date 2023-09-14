@@ -313,6 +313,27 @@ var toggleLabels = document.querySelectorAll('.toggle-label');
 var dataObject; // Define dataObject in a scope accessible to both event handlers
 var btnSend = document.getElementById('btnSend'); // Define btnSend
 
+
+
+// Flag to track if the button has been clicked
+let btnClicked = false;
+const container6 = document.querySelector('.container-6');
+
+// Function to toggle the container's height
+function toggleContainerHeight() {
+    if (!btnClicked) {
+        canvasContainer.style.height = '100%';
+        canvasContainer.classList.toggle('hidden');
+        container6.classList.toggle('hidden');
+        btnClicked = true;
+    } else {
+        canvasContainer.style.height = '0';
+        container6.style.height = '0';
+        btnClicked = false;
+    }
+}
+
+
 function resetButton() {
     btnSend.removeAttribute('disabled');
     btnSend.querySelector('.btn-text').style.display = 'inline-block';
@@ -364,7 +385,7 @@ document.getElementById('btnSend').addEventListener('click', function () {
     var geometryType;
     var typology;
     var floorsInput;
-
+    toggleContainerHeight();
     // Get the drawn layer, if available
     var layers = drawnItems.getLayers();
     if (layers.length > 0) {
@@ -413,7 +434,7 @@ document.getElementById('btnSend').addEventListener('click', function () {
             coordinates: JSONCoordinates
         },
         properties: {
-            corridorType: toggleCorridor ? "double loaded" : "single loaded",
+            corridorType: toggleCorridor ? "single loaded" : "double loaded",
             typology: typology,
             floorsInput: floorsInput
         }
@@ -435,7 +456,9 @@ document.getElementById('btnSend').addEventListener('click', function () {
         redirect: 'follow'
     };
 
-    fetch("https://graphtestrun.fly.dev/process", requestOptions)
+
+    //fetch("https://graphtestrun.fly.dev/process", requestOptions)
+    fetch("https://graphmlwebapp.fly.dev/process", requestOptions)
     //fetch("http://127.0.0.1:8000/process", requestOptions)
     .then(response => response.text())
     .then(result => {
@@ -444,6 +467,108 @@ document.getElementById('btnSend').addEventListener('click', function () {
 
         // Handle the fetch response here
         console.log(result);
+        var data = JSON.parse(result);
+        console.log(data);
+
+
+        // Assuming 'data' contains the parsed JSON response
+        const coordinates = data.features.map((feature) => {
+            if (
+            feature &&
+            feature.node &&
+            feature.node.properties &&
+            feature.node.properties.metadata &&
+            feature.node.properties.metadata.geometry &&
+            feature.node.properties.metadata.geometry.coordinates
+            ) {
+            const geometry = feature.node.properties.metadata.geometry;
+            return geometry.coordinates;
+            } else {
+            return null; // Or handle the case when data is missing
+            }
+        });
+        
+        //console.log(coordinates);
+
+        // Assuming 'data' contains the parsed JSON response
+        const predictedClass = data.features.map((feature) => {
+            if (
+            feature &&
+            feature.node &&
+            feature.node.properties && 
+            feature.node.properties.predictedClass
+            ) {
+            return parseInt(feature.node.properties.predictedClass, 10); // Convert to an integer if needed
+            } else {
+            return null; // Or handle the case when data is missing
+            }
+        });
+        
+        console.log(predictedClass);
+
+        const source = [];
+        data.features.map((feature) => {
+            if (
+              feature &&
+              feature.edge &&
+              feature.edge.properties &&
+              feature.edge.properties.source !== undefined
+            ) {
+              const sourceValue = parseInt(feature.edge.properties.source, 10);
+              source.push(sourceValue);
+            }
+          });
+          
+          //console.log(source);
+
+          const target = [];
+          data.features.map((feature) => {
+              if (
+                feature &&
+                feature.edge &&
+                feature.edge.properties &&
+                feature.edge.properties.target !== undefined
+              ) {
+                const targetValue = parseInt(feature.edge.properties.target, 10);
+                target.push(targetValue);
+              }
+            });
+            
+            console.log(target);
+
+    //Sort coordinates by predicted class
+    for (let i = 0; i < predictedClass.length; i++) {
+    const currentCoordinate = coordinates[i];
+    const currentClass = predictedClass[i];
+
+    switch (currentClass) {
+        case 0:
+        unit.push(currentCoordinate);
+        break;
+        case 1:
+        egress.push(currentCoordinate);
+        break;
+        case 2:
+        corridor.push(currentCoordinate);
+        break;
+        // Add more cases if you have more classes
+        default:
+        // Handle any other cases if needed
+        break;
+    }
+    }
+
+    // Specify the startPt, endPt, color, and thickness you want
+    createNode(scene, egress, 0xE0482F, 0.3);
+    createNode(scene, unit, 0x3868FF, 0.2);
+    createNode(scene, corridor, 0xFF8C7D, 0.2);
+
+    createEdge(scene, coordinates, source, target, predictedClass, 0.1);
+
+    var inputGeometry = adjustCoordinates(JSONCoordinates, typology);
+    //var inputCoordinates = [[79.604578, 45.09543],[40.422679, -46.102012],[-76.240781, -37.299453],[-43.786476, 36.292871],[79.604578, 45.09543]];
+    createInputContext(scene,inputGeometry, 1.2);
+
     })
     .catch(error => {
         // Re-enable the button and hide the spinner on error
@@ -454,8 +579,6 @@ document.getElementById('btnSend').addEventListener('click', function () {
     });
 });
 
-
-
 //ThreeJS
 const scene = new THREE.Scene();
 scene.background = new THREE.Color('navajowhite'); // Set background color to navajowhite
@@ -464,7 +587,7 @@ scene.background = new THREE.Color('navajowhite'); // Set background color to na
 const camera = new THREE.PerspectiveCamera(130, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.up.set(0,0,1);
 camera.setFocalLength (35)
-camera.position.set(200, 200, 100); //setup the right camera to start with!
+camera.position.set(0, -200, 100); //setup the right camera to start with!
 
 // Setup Renderer
 const renderer = new THREE.WebGLRenderer();
@@ -497,100 +620,15 @@ var unit = [];
 var egress = [];
 var corridor = [];
 
-
-
-// Read the JSON file
-fetch('predictedGraph.json')
-  .then(response => response.json())
-  .then(data => {
-
-    // Debugging: Log the entire JSON data
-    //console.log('JSON Data:', data);
-
-    // Extract coordinates from the JSON data and format them
-
-
-    data.features.forEach(featureGroup => {
-        featureGroup.forEach(feature => {
-            if (feature && feature.node && feature.node.properties && feature.node.properties.metadata && feature.node.properties.metadata.geometry) {
-                const geometry = feature.node.properties.metadata.geometry.coordinates;
-                const [x, y, z] = geometry;
-                coordinates.push([x, y, z]);
-            }
-        });
-    });
-
-    data.features.forEach(featureGroup => {
-        featureGroup.forEach(feature => {
-            if (feature && feature.node && feature.node.properties && feature.node.properties.predictedClass) {
-                const classValue = feature.node.properties.predictedClass;
-                predictedClass.push(parseInt(classValue[0]));
-            }
-        });
-    });
-
-    data.features.forEach(featureGroup => {
-    featureGroup.forEach(feature => {
-        if (feature && feature.edge && feature.edge.properties && feature.edge.properties.source !== undefined) {
-        const sourceValue = feature.edge.properties.source;
-        source.push(parseInt(sourceValue));
-        }
-    });
-    });
-
-    data.features.forEach(featureGroup => {
-        featureGroup.forEach(feature => {
-        if (feature && feature.edge && feature.edge.properties && feature.edge.properties.target !== undefined) {
-            const targetValue = feature.edge.properties.target;
-            target.push(parseInt(targetValue));
-        }
-        });
-    });
-
-    
-
-    // Debugging: Log the coordinates
-    //console.log('Coordinates:', coordinates);
-
-    for (let i = 0; i < predictedClass.length; i++) {
-    const currentCoordinate = coordinates[i];
-    const currentClass = predictedClass[i];
-
-    switch (currentClass) {
-        case 0:
-        unit.push(currentCoordinate);
-        break;
-        case 1:
-        egress.push(currentCoordinate);
-        break;
-        case 2:
-        corridor.push(currentCoordinate);
-        break;
-        // Add more cases if you have more classes
-        default:
-        // Handle any other cases if needed
-        break;
+function adjustCoordinates(coordinates, typology) {
+    // Check if typology is 'courtyard'
+    if (typology === 'courtyard') {
+      // Make a copy of the first coordinate and add it to the end of the list
+      const firstPoint = coordinates[0];
+      coordinates.push(firstPoint);
     }
-    }
-
-
-    // Specify the startPt, endPt, color, and thickness you want
-    createNode(scene, egress, 0xE0482F, 0.3);
-    createNode(scene, unit, 0x3868FF, 0.2);
-    createNode(scene, corridor, 0xFF8C7D, 0.2);
-
-    createEdge(scene, coordinates, source, target, predictedClass, 0.1);
-
-    var inputCoordinates = [[79.604578, 45.09543],[40.422679, -46.102012],[-76.240781, -37.299453],[-43.786476, 36.292871],[79.604578, 45.09543]];
-    createInputContext(scene,inputCoordinates, 1.2);
-
-
-
-})
-.catch(error => {
-  console.error('Error:', error);
-});
-
+    return coordinates;
+}
 
 // CreateGraph function, takes endPt and color to create a sphere at the endPt
 function createNode(scene, coordinate, color, thickness) {
@@ -691,8 +729,41 @@ function createPolygon(scene, vertices, scale, opacity) {
 
 
 
+// Custom class to manage InputContextGeometry
+class InputContextGeometry {
+    constructor() {
+        this.circles = [];
+        this.cylinders = [];
+    }
+
+    clear(scene) {
+        // Remove circles with a specific name or tag
+        this.circles.forEach(circle => {
+            if (circle.name === 'InputContextCircle') {
+                scene.remove(circle);
+            }
+        });
+        this.circles.length = 0;
+
+        // Remove cylinders with a specific name or tag
+        this.cylinders.forEach(cylinder => {
+            if (cylinder.name === 'InputContextCylinder') {
+                scene.remove(cylinder);
+            }
+        });
+        this.cylinders.length = 0;
+    }
+}
+
+// Create an instance of InputContextGeometry
+const inputContextGeometry = new InputContextGeometry();
+
+
 // Function to create two single-sided circles, one facing up and the other facing down, with different opacity
 function createInputContext(scene, coordinates, offsetDistance) {
+    // Clear the previous InputContextGeometry
+    inputContextGeometry.clear(scene);
+
     // Calculate the maximum radius
     let maxRadiusSq = 0;
     coordinates.forEach(coord => {
@@ -702,6 +773,10 @@ function createInputContext(scene, coordinates, offsetDistance) {
         }
     });
     const maxRadius = Math.sqrt(maxRadiusSq);
+
+    // Find the element with id "max-dimension" and set its text content
+    const maxDimension = document.getElementById('max-radius');
+    maxDimension.textContent = `Estimated Longest Dimension: ${Math.round(maxRadius*1.6)} meters`;
 
     // Create the first circle geometry with the calculated radius and opacity
     const circleGeometry1 = new THREE.CircleGeometry(maxRadius * offsetDistance, 254);
@@ -732,6 +807,30 @@ function createInputContext(scene, coordinates, offsetDistance) {
     circle2.position.set(0, 0, -1); // Adjust the Z position as needed
 
     scene.add(circle2);
+
+    // Calculate the radius for the third circle (1/10th of maxRadius)
+    const circle3Radius = maxRadius / 50;
+
+    // Create the third circle geometry
+    const circleGeometry3 = new THREE.CircleGeometry(circle3Radius, 254);
+    const circleMaterial3 = new THREE.MeshBasicMaterial({
+        color: 0x000080, // Navy
+        transparent: true,
+        opacity: 1.0, // Adjust opacity for the third circle
+        side: THREE.DoubleSide, // Make the third circle single-sided and face up
+    });
+    const circle3 = new THREE.Mesh(circleGeometry3, circleMaterial3);
+
+    // Position the third circle from the origin by maxRadius * 1.3 in the y-direction
+    circle3.position.set(0, maxRadius * 1.3, 0);
+
+    scene.add(circle3);
+
+    // Add circles to the InputContextGeometry with specific names or tags
+    circle1.name = 'InputContextCircle';
+    circle2.name = 'InputContextCircle';
+    circle3.name = 'InputContextCircle';
+    inputContextGeometry.circles.push(circle1, circle2, circle3);
 
 
     // Loop through the list of coordinates
@@ -767,9 +866,13 @@ function createInputContext(scene, coordinates, offsetDistance) {
         cylinder.setRotationFromQuaternion(quaternion);
 
         scene.add(cylinder);
+
+        // Add cylinders to the InputContextGeometry with specific names or tags
+        cylinder.name = 'InputContextCylinder';
+        inputContextGeometry.cylinders.push(cylinder);
+
     }
 }
-
 
 
 
