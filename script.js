@@ -3,7 +3,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
 
 // Initialize the map
-const map = L.map('map').setView([41.3973, 2.1925], 18); //coordinates of Barcelona
+const map = L.map('map').setView([41.396521, 2.195018], 18); //coordinates of IAAC, Barcelona
 
 // Add the tile layer with a different color scheme
 L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
