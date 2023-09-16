@@ -467,10 +467,9 @@ document.getElementById('btnSend').addEventListener('click', function () {
     };
 
 
-    //fetch("https://graphtestrun.fly.dev/process", requestOptions)
-    //fetch("https://graphmlwebapp.fly.dev/process", requestOptions)
-    fetch("https://graphmlcopy.fly.dev/process", requestOptions)
-    //fetch("http://127.0.0.1:8000/process", requestOptions)
+    fetch("https://graphmlwebapp.fly.dev/process", requestOptions) // Ren
+    //fetch("https://graphmlcopy.fly.dev/process", requestOptions) // James
+    //fetch("http://127.0.0.1:8000/process", requestOptions) // Local
     //.then(response => response.text())
     .then(response => {
         //console.log("Response from backend", response);
