@@ -373,31 +373,15 @@ document.addEventListener('DOMContentLoaded', function() {
     resetButton(); // Initially hide the spinner and enable the button
 });
 
-
-
-var coordinates = [];
-var unit = [];
-var egress = [];
-var corridor = [];
-
 // Create a Javascript Object combining all browser inputs
 // Event handler for btnSend button click
 document.getElementById('btnSend').addEventListener('click', function () {
-    
+    var coordinates = [];
     var geometryType;
     var typology;
     var floorsInput;
     toggleContainerHeight();
     // Get the drawn layer, if available
-
-    // Clear the scene before adding new objects
-    scene.clear(); //
-
-    unit = []; // Clear the unit array
-    egress = []; // Clear the egress array
-    corridor = []; // Clear the corridor array
-    coordinates = []; // Clear the coordinates array
-
     var layers = drawnItems.getLayers();
     if (layers.length > 0) {
         var layer = layers[0]; // Assuming only one layer is drawn
@@ -626,10 +610,14 @@ canvasContainer.appendChild(renderer.domElement);
  // Orbit
 const controls = new OrbitControls(camera, renderer.domElement);
 
+// Declare the units at high scope
+var coordinates = [];
 var predictedClass = [];
 var source = [];
 var target = [];
-
+var unit = [];
+var egress = [];
+var corridor = [];
 
 function adjustCoordinates(coordinates, typology) {
     // Check if typology is 'courtyard'
@@ -736,8 +724,45 @@ function createPolygon(scene, vertices, scale, opacity) {
 }
 */
 
+// Create a material with the specified color
+
+
+
+// Custom class to manage InputContextGeometry
+class InputContextGeometry {
+    constructor() {
+        this.circles = [];
+        this.cylinders = [];
+    }
+
+    clear(scene) {
+        // Remove circles with a specific name or tag
+        this.circles.forEach(circle => {
+            if (circle.name === 'InputContextCircle') {
+                scene.remove(circle);
+            }
+        });
+        this.circles.length = 0;
+
+        // Remove cylinders with a specific name or tag
+        this.cylinders.forEach(cylinder => {
+            if (cylinder.name === 'InputContextCylinder') {
+                scene.remove(cylinder);
+            }
+        });
+        this.cylinders.length = 0;
+    }
+}
+
+// Create an instance of InputContextGeometry
+const inputContextGeometry = new InputContextGeometry();
+
+
 // Function to create two single-sided circles, one facing up and the other facing down, with different opacity
 function createInputContext(scene, coordinates, offsetDistance) {
+    // Clear the previous InputContextGeometry
+    inputContextGeometry.clear(scene);
+
     // Calculate the maximum radius
     let maxRadiusSq = 0;
     coordinates.forEach(coord => {
@@ -800,6 +825,13 @@ function createInputContext(scene, coordinates, offsetDistance) {
 
     scene.add(circle3);
 
+    // Add circles to the InputContextGeometry with specific names or tags
+    circle1.name = 'InputContextCircle';
+    circle2.name = 'InputContextCircle';
+    circle3.name = 'InputContextCircle';
+    inputContextGeometry.circles.push(circle1, circle2, circle3);
+
+
     // Loop through the list of coordinates
     for (let i = 0; i < coordinates.length - 1; i++) {
         const color = 0x000080; // Default to Navy
@@ -833,6 +865,11 @@ function createInputContext(scene, coordinates, offsetDistance) {
         cylinder.setRotationFromQuaternion(quaternion);
 
         scene.add(cylinder);
+
+        // Add cylinders to the InputContextGeometry with specific names or tags
+        cylinder.name = 'InputContextCylinder';
+        inputContextGeometry.cylinders.push(cylinder);
+
     }
 }
 
