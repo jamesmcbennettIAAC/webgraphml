@@ -159,7 +159,7 @@ canvas {
 }
 
 .fs-1 {
-    font-size: 4.5rem!important;
+    font-size: 4rem!important;
     background-image: conic-gradient(#553c9a, #ee4b2b, #00c2cb);
     color: transparent;
     background-clip: text;
@@ -526,7 +526,7 @@ align-items: center;
 {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
 }
 
 /* Styling for the centered legend */
